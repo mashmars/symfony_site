@@ -13,8 +13,10 @@ use App\Entity\User;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-
+//注册
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+//登陆
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AuthController extends Controller
 {
@@ -76,16 +78,15 @@ class AuthController extends Controller
     /**
      * @Route("/login",name="login")
      */
-    public function login()
+    public function login(AuthenticationUtils $authenticationUtils)
     {
-        $user = new User();
-        $form = $this->createFormBuilder($user)
-                ->add('username',TextType::class,['label'=>'登陆名','help'=>'请输入用户名或手机号或邮箱','attr'=>['placeholder'=>'用户名|手机号|Email']])
-                ->add('password',PasswordType::class,['label'=>'登陆密码'])
-                ->add('submit',SubmitType::class,['label'=>'登 陆','attr'=>['class'=>'button primary hollow small']])
-                ->getForm();
-        return $this->render('home/auth/login.html.twig',[
-            'form'=> $form->createView(),
+        //
+        $error = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername = $authenticationUtils->getLastUsername();
+       
+        return $this->render('home/auth/login.html.twig',[            
+            'last_username'=>$lastUsername,
+            'error' => $error,
         ]);
     }
 }

@@ -1,7 +1,10 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-    providers:
-        in_memory: { memory: ~ }
+    providers:        
+        user_db_provider:
+            entity:
+                class: App\Entity\User
+                #property: username
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -11,7 +14,7 @@ security:
             form_login:
                 login_path: login
                 check_path: login
-
+            provider: user_db_provider  #配置登录用户提供者
 
             # activate different ways to authenticate
 
@@ -29,4 +32,4 @@ security:
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
-        - { path: /register , roles: ROLE_USER}
+        - { path: ^/user, roles: ROLE_USER }

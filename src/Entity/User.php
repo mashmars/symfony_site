@@ -7,7 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
-
+use Symfony\Component\Security\Core\User\AdvancedUserInterface;
 
 
 /**
@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @UniqueEntity(fields="phone",message="手机号已存在")
  * @ORM\HasLifecycleCallbacks() //使用生命周期
  */
-class User implements UserInterface //注册用
+class User implements AdvancedUserInterface , \Serializable //注册用 , \Serializable 登录用
 {
     /**
      * @ORM\Id()
@@ -81,14 +81,18 @@ class User implements UserInterface //注册用
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $updated_at;
-
     /**
-     * 新增 start
+     * @ORM\Column(name="is_active", type="boolean")
+     */
+    private $isActive;
+    /**
+     * 注册新增 start
      */
     public function __construct()
     {
         $this->roles = ['ROLE_USER'];
         $this->status = true;
+        $this->isActive = true;
     }
     public function getPlainPassword()
     {
@@ -104,7 +108,7 @@ class User implements UserInterface //注册用
     }
     public function getSalt()
     {
-        return '';
+        return null;
     }
     public function eraseCredentials()
     {
@@ -241,5 +245,52 @@ class User implements UserInterface //注册用
         $this->updated_at = $updated_at;
 
         return $this;
+    }
+
+    /**
+     * 登录 新增 start
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
+    }
+    public function isAccountNonExpired()
+    {
+        return true;
+    }
+
+    public function isAccountNonLocked()
+    {
+        return true;
+    }
+
+    public function isCredentialsNonExpired()
+    {
+        return true;
+    }
+
+    public function isEnabled()
+    {
+        return $this->isActive;
+    }
+    public function serialize()
+    {
+        return serialize([
+            $this->id,
+            $this->usrname,
+            $this->email,
+            $this->phone,
+            $this->isActive,
+        ]);
+    }
+    public function unserialize($serialized)
+    {
+        list(
+            $this->id,
+            $this->usrname,
+            $this->email,
+            $this->phone,
+            $this->isActive,
+        ) = unserialize($serialized);
     }
 }
