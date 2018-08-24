@@ -53,7 +53,7 @@ class UserRepository extends ServiceEntityRepository //EntityRepository implemen
     */
 
     //使用自定义查询加载用户
-     public function loadUserByUsername($username)
+    /* public function loadUserByUsername($username)
     {
         return $this->createQueryBuilder('p')
             ->where('p.username = :username or p.email = :email or phone = :phone')
@@ -62,5 +62,5 @@ class UserRepository extends ServiceEntityRepository //EntityRepository implemen
             ->setParameter('phone',$username)
             ->getQuery()
             ->getOneOrNullResult();
-    } 
+    } */
 }
