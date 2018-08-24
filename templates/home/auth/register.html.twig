@@ -1,0 +1,57 @@
+{% extends 'home/base.html.twig' %}
+{% block title %}用户注册{% endblock %}
+{% block main %}
+<!--main-->
+<div class="grin-container" style="background: url(/home/images/login-register.jpg) center center/cover no-repeat!important; height: 100%; width:100%;position:fixed">
+    <div class="grid-x" >          
+      <div class="cell">
+          <div class="callout shadow" style="margin:0 auto;max-width:500px;top:30px;">
+              {% for type,messages in app.flashes %}
+              <div class="cell">
+                  <div class="{{ type }} callout" data-closable="slide-out-right">
+                    {% for message in messages %}
+                    <p>{{ message }}</p>
+                    {% endfor %}
+                    <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                </div>
+                {% endfor %}
+                {% form_theme form 'home/field.html.twig' %}                
+                {{ form_start(form,{'attr':{'novalidate':'novalidate'}}) }}
+                {{ form_widget(form) }} 
+                {{ form_end(form) }}
+              <div class="cell margin-bottom-2">
+                <a class="float-right" href="{{ path('login') }}">已有账号，去登录</a>
+                <a class="float-left">忘记密码</a>
+              </div>
+            </div>
+      </div>
+    </div>
+    
+</div>
+{% endblock %}
+{% block script %}
+<script>
+  $(function(){
+    $('.send_email').click(function(){
+      $(this).prop('disabled',true);
+      var email = $('.email').val();
+      if(email == ''){
+        $(this).prop('disabled',false);
+        layer.msg('请输入邮箱',{time:2000,icon:5});
+        return false;
+      }
+      $.post("{{ path('send_email') }}",{email:email},function(data){
+        if(data.code == 0){
+          layer.msg(data.msg,{time:2000,icon:1});
+        }else{
+          layer.msg(data.msg,{time:2000,icon:5});
+          $('.send_email').prop('disabled',false);
+        }
+      },'json')
+    })
+  })
+</script>
+{% endblock %}

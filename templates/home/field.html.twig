@@ -1,0 +1,28 @@
+{%- block form_row -%}
+    {%- set widget_attr = {} -%}
+    {%- if help is not empty -%}
+        {%- set widget_attr = {attr: {'aria-describedby': id ~"_help"}} -%}
+    {%- endif -%}
+    <div>
+        {{- form_label(form) -}}       
+        {{- form_widget(form, widget_attr) -}}
+        {# {- form_errors(form) -} 去掉自带的错误信息显示 #}
+        {{- form_help(form) -}}
+    </div>
+{%- endblock form_row -%}
+
+
+{%- block form_widget_simple -%}
+    {%- set type = type|default('text') -%}
+    {%- if type == 'range' or type == 'color' -%}
+        {# Attribute "required" is not supported #}
+        {%- set required = false -%}
+    {%- endif -%}
+    <input type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    {%- if errors|length > 0 -%}    
+    {%- for error in errors -%}{# 新增的错误信息显示 #}
+        <span class="form-error" style="display:block">{{ error.message }}</span>
+    {%- endfor -%}    
+    {%- endif -%}
+{%- endblock form_widget_simple -%}
+
