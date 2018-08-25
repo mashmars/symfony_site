@@ -25,7 +25,6 @@ class UserType extends AbstractType
                 ->add('phone',TextType::class,['label'=>'手机号*'])                
                 ->add('plainPassword',RepeatedType::class,[
                     'type'=> PasswordType::class,
-                    'mapped'=>false,
                     'first_options'=>['label'=>'密码'],
                     //'first_options'=>['label'=>'密码','attr'=>['validate'=>NotBlank::class]],
                     'second_options'=>['label'=>'确认密码']

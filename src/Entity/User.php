@@ -17,7 +17,7 @@ use Symfony\Component\Security\Core\User\AdvancedUserInterface;
  * @UniqueEntity(fields="phone",message="手机号已存在")
  * @ORM\HasLifecycleCallbacks() //使用生命周期
  */
-class User implements AdvancedUserInterface , \Serializable //注册用 , \Serializable 登录用
+class User implements UserInterface , \Serializable //注册用 , \Serializable 登录用
 {
     /**
      * @ORM\Id()
@@ -98,13 +98,14 @@ class User implements AdvancedUserInterface , \Serializable //注册用 , \Seria
     {
         return $this->plainPassword;
     }
-    public function setPlainPasswrod($plainPassword)
+
+    public function setPlainPassword($plainPassword)
     {
         $this->plainPassword = $plainPassword;
     }
     public function getRoles()
     {
-        return $this->roles;
+        return ['ROLE_USER'];//$this->roles;
     }
     public function getSalt()
     {
@@ -250,6 +251,7 @@ class User implements AdvancedUserInterface , \Serializable //注册用 , \Seria
     /**
      * 登录 新增 start
      */
+    /*
     public function getIsActive()
     {
         return $this->isActive;
@@ -272,25 +274,27 @@ class User implements AdvancedUserInterface , \Serializable //注册用 , \Seria
     public function isEnabled()
     {
         return $this->isActive;
-    }
+    }*/
     public function serialize()
     {
         return serialize([
             $this->id,
-            $this->usrname,
+            $this->username,
             $this->email,
             $this->phone,
             $this->isActive,
+            $this->roles,
         ]);
     }
     public function unserialize($serialized)
     {
         list(
             $this->id,
-            $this->usrname,
+            $this->username,
             $this->email,
             $this->phone,
             $this->isActive,
-        ) = unserialize($serialized);
+            $this->roles,
+        ) = unserialize($serialized, array('allowed_classes' => false));
     }
 }

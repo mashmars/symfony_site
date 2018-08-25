@@ -33,6 +33,7 @@ class AuthController extends Controller
             $code = $form->get('code')->getData();
             $redis = $this->get('redis');
             $code_ = $redis->get('register:' .$user->getEmail() . ':code');
+
             if($code != $code_){
                 $this->addFlash('alert','邮箱验证码不正确');
                 return $this->redirectToRoute('register');
@@ -40,6 +41,7 @@ class AuthController extends Controller
             
             //下面是正式的流程
             $plainPassword = $user->getPlainPassword();
+            //$plainPassword = $form->get('plainPassword')->getData();
             $password = $passwordEncoder->encodePassword($user,$plainPassword);
             $user->setPassword($password);
             $entityManager = $this->getDoctrine()->getManager();
@@ -78,9 +80,12 @@ class AuthController extends Controller
     /**
      * @Route("/login",name="login")
      */
-    public function login(AuthenticationUtils $authenticationUtils)
+    public function login(AuthenticationUtils $authenticationUtils,Request $request)
     {
         //
+        dump($this->getUser());
+        $session = $request->getSession();
+        dump($session);
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
        
@@ -88,5 +93,12 @@ class AuthController extends Controller
             'last_username'=>$lastUsername,
             'error' => $error,
         ]);
+    }
+    /**
+     * @Route("/")
+     */
+    public function index()
+    {
+        return new Response('<body>ddd</body>');
     }
 }
