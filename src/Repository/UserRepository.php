@@ -16,12 +16,12 @@ use Doctrine\ORM\EntityRepository;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends ServiceEntityRepository //EntityRepository implements UserLoaderInterface 
+class UserRepository extends EntityRepository implements UserLoaderInterface //ServiceEntityRepository  //
 {
-    public function __construct(RegistryInterface $registry)
+    /*public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, User::class);
-    }
+    }*/
 
 //    /**
 //     * @return User[] Returns an array of User objects
@@ -53,14 +53,14 @@ class UserRepository extends ServiceEntityRepository //EntityRepository implemen
     */
 
     //使用自定义查询加载用户
-    /* public function loadUserByUsername($username)
+     public function loadUserByUsername($username)
     {
         return $this->createQueryBuilder('p')
-            ->where('p.username = :username or p.email = :email or phone = :phone')
+            ->where('p.username = :username or p.email = :email or p.phone = :phone')
             ->setParameter('username',$username)
             ->setParameter('email',$username)
             ->setParameter('phone',$username)
             ->getQuery()
             ->getOneOrNullResult();
-    } */
+    }
 }

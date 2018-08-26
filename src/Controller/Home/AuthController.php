@@ -94,11 +94,5 @@ class AuthController extends Controller
             'error' => $error,
         ]);
     }
-    /**
-     * @Route("/")
-     */
-    public function index()
-    {
-        return new Response('<body>ddd</body>');
-    }
+
 }

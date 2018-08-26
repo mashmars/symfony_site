@@ -280,6 +280,7 @@ class User implements UserInterface , \Serializable //注册用 , \Serializable 
         return serialize([
             $this->id,
             $this->username,
+            $this->password,
             $this->email,
             $this->phone,
             $this->isActive,
@@ -291,6 +292,7 @@ class User implements UserInterface , \Serializable //注册用 , \Serializable 
         list(
             $this->id,
             $this->username,
+            $this->password,
             $this->email,
             $this->phone,
             $this->isActive,
