@@ -8,6 +8,10 @@ parameters:
     email.username: 'mash0001@163.com'
     email.password: 'Ma125617518'
 
+    subdomain: 'dev' #设置默认二级域名
+    domain: '.site.com' #设置默认域名
+    host: 'dev.site.com' #设置默认主机域名
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -34,12 +38,19 @@ services:
 
     #配置redis 控制器里直接使用 $redis->get('redis'); $redis->set(...);
     redis:
-        class: \Redis
+        class: Redis
         calls: 
             - method: connect
               arguments: 
                 - '127.0.0.1'
         public: true
+    
+    session.handler.redis:
+        class: Symfony\Component\HttpFoundation\Session\Storage\Handler\RedisSessionHandler
+        arguments: 
+            - '@redis'
+            
+    
     
     #配置发送邮件 
     #控制器里只需要调用    

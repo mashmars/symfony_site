@@ -7,6 +7,11 @@ use Symfony\Component\HttpFoundation\Request;
 
 require __DIR__.'/../vendor/autoload.php';
 
+//设置session作用域
+ini_set('session.cookie_path','/');
+ini_set('session.cookie_domain','.site.com');
+ 
+
 // The check is to ensure we don't use .env in production
 if (!isset($_SERVER['APP_ENV'])) {
     if (!class_exists(Dotenv::class)) {

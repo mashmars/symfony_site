@@ -52,6 +52,14 @@ class UserRepository extends EntityRepository implements UserLoaderInterface //S
     }
     */
 
+    public function findOneByEmail($email)
+    {
+        return $this->createQueryBuilder('u')
+            ->where('u.email = :email')
+            ->setParameter('email',$email)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
     //使用自定义查询加载用户
      public function loadUserByUsername($username)
     {

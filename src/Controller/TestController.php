@@ -6,6 +6,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+
+//
+use App\Services\Functions;
+
+
 class TestController extends Controller
 {
     /**
@@ -37,5 +42,17 @@ class TestController extends Controller
         $redis->set('email:402738923@qq.com:code',123456);
         dump($result); 
         return new Response('<body>yes</body>');
+    }
+    /**
+     * @Route("/test/functions",name="test_functions")
+     * 测试公共函数
+     */
+    public function test_functions()
+    {
+        $function = new Functions();
+        $email = '402738923@qq.com';
+        $url = $function->get_gravatar($email);
+        dump($url);
+        return new Response('<body>' . $url . '</body>');
     }
 }

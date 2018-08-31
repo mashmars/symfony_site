@@ -1,0 +1,170 @@
+{% extends 'home/common.html.twig' %}
+{% block title %}{{ post.title }}{% endblock %}
+{% block banner %}
+    <div class="grid-x">
+        <div class="cell">
+            <div class="callout large primary">
+                <div class="text-center">
+                  <h1>Our Blog</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+  {% endblock %}
+   {% block main %}
+        <div class="grid-x">
+          <div class="cell">
+              <h4 class="text-center">{{ post.title }}</h4>
+              <div class="content">
+                {{ post.content|raw }}
+              </div>
+          </div>
+        </div>
+        <!--comments-->
+        <div class="grid-x margin-top-3">
+        {% for type,messages in app.flashes %}
+          <div class="cell">
+              <div class="{{ type }} callout" data-closable="slide-out-right">
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+                <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+            </div>
+          {% endfor %}
+          <div class="cell">
+              <p>评论</p>
+              <form>
+                  <div class="grid-x grid-padding-x">
+                      <div class="cell">
+                          <label>
+                              请留下您的评论
+                              <textarea placeholder="回复..." rows="3" cols="100" id="content"></textarea>
+                              <input type="hidden" name='csrf_token' value="{{ csrf_token('comment') }}" id="csrf_token" />
+                          </label>
+                          <p class="help-text">登陆后方可回复</p>
+                      </div>
+                  </div>
+                  <div class="grid-x grid-margin-x margin-right-3 float-right">
+                      <fieldset class="cell">
+                        <button class="button small " type="button" id="comment">提交</button>
+                      </fieldset>                          
+                    </div>
+              </form>
+          </div>
+        </div>
+        <!--comment list-->
+        <div class="grid-x margin-top-2">
+          <div class="cell">
+          
+            {% for comment in pagination %}
+            
+              <div class="media-object">
+                  <div class="media-object-section">
+                    <img class="thumbnail" src="{{ comment.userid.headimg }}">
+                  </div>
+                  <div class="media-object-section"> 
+                    <h6>{{ comment.userid.nickname }}
+                      <small class="margin-left-3">{{ comment.getCreatedAt()|date('Y-m-d H:i:s')|trans_datetime }}</small>
+                      {% if app.user %}
+                      {% if app.user.getId() == post.userid.getId()%}
+                      <button class="button tiny alert float-right margin-left-3 comment-delete" data-id="{{ comment.id }}">删除</button>
+                      {% endif %}
+                      {% endif %}
+                    </h6>
+                    <p>{{ comment.content }}</p>
+                  </div>
+              </div>
+              
+              {% endfor %}
+         
+          </div>
+          <div class="cell text-center margin-top-2">
+              {{ knp_pagination_render(pagination) }}
+          </div>
+        </div>
+      {% endblock %}    
+     {% block right %}
+        <div class="callout shadow">
+          <h6 >博客分类</h6>
+          <ul class="no-bullet">
+            {% for category in categorys %}
+            <li><a href="{{ path('blog_category',{ 'name':category.name,'id':category.id }) }}">{{ category.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="callout shadow">
+          <h6>博客标签</h6>
+          {% for tag in tags %}
+          <a class="label" href="{{ path('blog_tag',{ 'name':tag.name,'id':tag.id }) }}">{{ tag.name }}</a>
+          {% endfor %}
+        </div>
+        <div class="callout shadow">
+          <h6>热门博客文章</h6>
+          <ul class="list-disc">
+            {% for post in post_hot %}
+            <li><a href="{{ path('blog_detail',{'title':post.title,'id':post.id }) }}">{{ post.title }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>    
+        <div class="callout shadow">
+          <h6>喜欢的人</h6>
+          <ul class="list-disc">
+              <li><a>这是标题</a></li>
+              <li><a>这是标题</a></li>
+              <li><a>这是标题</a></li>
+            </ul>
+        </div>
+    {% endblock %}
+    {% block script %}
+    {{ parent() }}
+    <script>
+    $(function(){
+      $('#comment').click(function(){
+        var obj = $(this);
+        $(this).prop('disabled',true);
+        var content = $('#content').val();
+        var csrf_token = $('#csrf_token').val();
+        if(content == '')
+        {
+          layer.msg('评论内容不能为空',{time:2000,icon:2});
+          $(this).prop('disabled',false);
+          return false;
+        }
+        $.post("{{ path('blog_comment') }}",{content:content,csrf_token:csrf_token,post_id:"{{ post.id }}"},function(data){
+            if(data.code == 0){
+              layer.msg(data.msg,{time:2000,icon:1});
+              location.reload();
+            }else if(data.code == -1){
+              layer.msg(data.msg,{time:2000,icon:5},function(){
+                var url ='/login?_target_path={{ app.request.getRequestUri() }}';
+                location.href = url ;
+              })
+            }else{
+              layer.msg(data.msg,{time:2000,icon:5});
+              obj.prop('disabled',false);
+            }
+        },'json')
+      })
+      //删除
+      $('.comment-delete').click(function(){
+        $(this).prop('disabled',true);
+        var obj = $(this);
+        var id = $(this).attr('data-id');
+        $.post("{{ path('blog_comment_delete') }}",{id:id},function(data){
+          if(data.code == 0){
+            layer.msg(data.msg,{time:2000,icon:1},function(){
+              obj.parents('.media-object').remove();
+            });
+          }else{
+            obj.prop('disabled',false);
+            layer.msg(data.msg,{time:2000,icon:5});
+          }
+        },'json')
+      })
+    })
+    </script>
+    {% endblock %}

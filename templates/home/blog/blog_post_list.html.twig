@@ -1,0 +1,81 @@
+{% extends 'home/common.html.twig' %}
+{% block title %}博客中心-博客列表{% endblock %}
+{% block banner %}
+    <div class="grid-x">
+        <div class="cell">
+            <div class="callout large primary">
+                <div class="text-center">
+                  <h1>Our Blog</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+    {% block main %}
+          <div class="cell margin-top-1"> 
+            {% for article in pagination %}
+            <div class="grid-x shadow padding-1 margin-top-1">
+                <div class="cell large-2">
+                <p>
+                    <a href="{{ path('blog_detail',{'title':article.title,'id':article.id }) }}"><img src= "https://placeimg.com/150/150/people"></a>
+                </p>
+                </div>
+                <div class="cell large-10">
+                    <h4><a href="{{ path('blog_detail',{'title':article.title,'id':article.id }) }}">{{ article.title }}</a></h4>
+                    <p class="subheader">
+                        <a class="margin-right-1"><span><i class="fi-torso"> {{ article.userid.getNickname() }}</i>  </span></a>
+                        <a class="margin-right-1" href="{{ path('blog_category',{ 'name':article.category.name,'id':article.category.id }) }}"><span><i class="fi-checkbox"> {{ article.category.name }}</i> </span></a>
+                        <a class="margin-right-1"><span><i class="fi-calendar"> {{ article.getCreatedAt()|date('Y-m-d') }}</i></span></a>
+                        <a class="margin-right-1"><span><i class="fi-eye"> {{ article.views }} 阅读</i></span> </a>
+                        <a class="margin-right-1"><span><i class="fi-comments"> {{ article.comments|count }} 评论</i></span></a>
+                    </p>
+                <p>{{ article.descript }} </p>
+                <p class="float-right">
+                    {% for tag in article.tags %}
+                    <a class="margin-right-1" href="{{ path('blog_tag',{ 'name':tag.name,'id':tag.id }) }}"><i class="fi-pricetag-multiple"></i> {{ tag.name }} </a>
+                    {% endfor %}
+                    <a class="margin-left-2" href="{{ path('blog_detail',{'title':article.title,'id':article.id }) }}">查看详情</a>
+                </p>                 
+                </div>
+            </div> 
+          {% endfor %}
+          </div>
+          <div class="cell text-center padding-top-3">
+              {{ knp_pagination_render(pagination) }}
+          </div>
+          
+          {% endblock %}
+      
+  {% block right %}
+        <div class="callout shadow">
+          <h6 >博客分类</h6>
+          <ul class="no-bullet">
+            {% for category in categorys %}
+            <li><a href="{{ path('blog_category',{ 'name':category.name,'id':category.id }) }}">{{ category.name }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="callout shadow">
+          <h6>博客标签</h6>
+          {% for tag in tags %}
+          <a class="label" href="{{ path('blog_tag',{ 'name':tag.name,'id':tag.id }) }}">{{ tag.name }}</a>
+          {% endfor %}
+        </div>
+        <div class="callout shadow">
+          <h6>热门博客文章</h6>
+          <ul class="list-disc">
+            {% for post in post_hot %}
+            <li><a href="{{ path('blog_detail',{'title':post.title,'id':post.id }) }}">{{ post.title }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="callout shadow">
+          <h6>喜欢的人</h6>
+          <ul class="list-disc">
+              <li><a>这是标题</a></li>
+              <li><a>这是标题</a></li>
+              <li><a>这是标题</a></li>
+            </ul>
+        </div>
+      {% endblock %}

@@ -1,0 +1,78 @@
+{% extends 'admin/base.html.twig' %}
+{% block breadcrumbs %}
+       <!--right-->
+       <!--breadcrumbs-->       
+       <div class="grid-x">
+          <nav aria-label="You are here:" role="navigation">
+              <ul class="breadcrumbs">
+                <li><a href="{{ path('admin_index') }}">后台首页</a></li>
+                <li><a href="#0">网站文章</a></li>                    
+                <li>
+                  <span class="show-for-sr">分类 </span> 管理
+                </li>
+              </ul>
+          </nav>  
+      </div>
+{% endblock %}
+{% block main %}
+      <div class="grid-x">
+        <div class="cell padding-left-1 padding-top-1 shadow">
+          <a class="button hollow primary small" href="{{ path('category_add') }}"><i class="fi-plus"></i> 新增</a>
+          <a class="button info small float-right search">搜索</a>
+          <div id="search" style="display:none">
+            <form>
+              <div class="grid-x grid-margin-x">
+                <div class="cell large-3 medium-3">
+                  <label>用户名</label><input type="text">
+                </div>
+                <div class="cell large-3 medium-3 padding-left-1">
+                  <label>标题</label><input type="text">
+                </div>
+                <div class="cell large-3 medium-3 padding-left-1">
+                  <label>标题</label><select><option>选项一</option><option>选项二</option><option>选项三</option></select>
+                </div>
+                <div class="cell large-3 medium-3">
+                  <a class="button small hollow success float-right">搜索</a>
+                </div>
+              </div>
+             
+            </form>
+          </div>
+          <hr>
+          {% for type,messages in app.flashes %}
+          <div class="cell">
+            <div class="{{ type }} callout" data-closable="slide-out-right">
+              {% for message in messages %}
+              <p>{{ message }}</p>
+              {% endfor %}
+              <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+          {% endfor %}   
+          <table class="hover">
+            <thead>                   
+              <tr>
+                  <th class="text-center">ID</th>
+                  <th class="text-center">名称</th>
+                  <th class="text-center">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for category in categorys %}
+              <tr class="text-center">
+                <td>{{ category.id }}</td>
+                <td>{{ category.name }}</td>
+                <td>
+                  <a class="label small pointer" href="{{ path('category_edit',{'slug':category.id}) }}"><i class="fi-pencil"></i> 编辑</a>
+                  <a class="label small alert pointer" href="{{ path('category_delete',{'slug':category.id}) }}"><i class="fi-trash"></i> 删除</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          
+        </div>
+      </div>
+{% endblock %}

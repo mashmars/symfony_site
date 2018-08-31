@@ -14,6 +14,7 @@ security:
             form_login:
                 login_path: login
                 check_path: login
+                csrf_token_generator: security.csrf.token_manager
             provider: user_db_provider  #配置登录用户提供者
         #secured_area:
             logout:
@@ -30,6 +31,7 @@ security:
     #前端用户加密
     encoders:
         App\Entity\User: bcrypt
+        App\Entity\Admin: sha512
     
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used

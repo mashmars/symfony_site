@@ -1,0 +1,38 @@
+{% extends 'admin/base.html.twig' %}
+{% block breadcrumbs %}
+       <!--right-->
+       <!--breadcrumbs-->       
+       <div class="grid-x">
+          <nav aria-label="You are here:" role="navigation">
+              <ul class="breadcrumbs">
+                <li><a href="{{ path('admin_index') }}">后台首页</a></li>
+                <li><a href="{{ path('category_index') }}">分类管理</a></li>                    
+                <li>
+                  <span class="show-for-sr">分类 </span> 新增
+                </li>
+              </ul>
+          </nav>  
+      </div>
+{% endblock %}
+{% block main %}
+      <div class="grid-x">
+        <div class="cell padding-left-1 padding-top-1 shadow"> 
+         {% for type,messages in app.flashes %}
+          <div class="cell">
+            <div class="{{ type }} callout" data-closable="slide-out-right">
+              {% for message in messages %}
+              <p>{{ message }}</p>
+              {% endfor %}
+              <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+          {% endfor %}          
+          {% form_theme form 'admin/field.html.twig' %}
+          {{ form_start(form,{'attr':{'novalidate':'novalidate'}}) }}
+          {{ form_widget(form) }}
+          {{ form_end(form) }}          
+        </div>
+      </div>
+{% endblock %}

@@ -1,0 +1,160 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}会员中心{% endblock %}</title>
+{% block css %}
+<link rel="stylesheet" href="/public/css/foundation.css">
+<link rel="stylesheet" href="/public/icons/foundation-icons.css">
+<link rel="stylesheet" href="/public/css/app.css">
+{% endblock %}
+</head>
+<body>
+{% block nav %}
+<div class="top-bar">
+  <div class="top-bar-left">
+    <ul class="menu">
+      <li class="menu-text">站点名称</li>
+    </ul>
+  </div>
+  <div class="top-bar-right">
+    <ul class="dropdown menu" data-dropdown-menu>
+      <li class="is-action"><a href="/">首页</a></li>
+      <li>
+        <a href="#">专辑</a>
+        <ul class="menu vertical">
+          <li><a>专辑一</a></li>
+          <li><a>专辑二</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">话题</a>
+        <ul class="menu vertical">
+          <li><a>话题一</a></li>
+          <li><a>话题二</a></li>
+        </ul>
+      </li>
+      <li>
+          <a href="#">操作说明</a>
+          <ul class="menu vertical">
+            <li><a>分类一</a></li>
+            <li><a>分类二</a></li>
+          </ul>
+        </li>
+      <li><a>博客中心</a></li>
+      {% if app.user %}
+      <li><a class="button hollow success small" href="{{ path('user_index') }}">个人中心</a></li>
+      {% else %}
+      <li class="margin-left-3"><a class="button" href="{{ path('login') }}">登录</a></li>
+      <li class="margin-left-1 margin-right-2"><a class="button" href="{{ path('register') }}">注册</a></li>
+      {% endif %}
+    </ul>
+    
+  </div>
+</div>
+{% endblock %}
+<!--main-->
+<div class="grid-container margin-top-1 margin-bottom-3" style="min-height:500px;">
+    <div class="grid-x grid-margin-x">
+      <!--left-->
+      <div class="cell">
+          {% block breadcrumbs %}
+          <div class="grid-x">
+              <nav aria-label="You are here:" role="navigation">
+                  <ul class="breadcrumbs">
+                    <li><a href="#0">public</a></li>
+                    <li><a href="#0">Features</a></li>                    
+                    <li>
+                      <span class="show-for-sr">Current: </span> Cloning
+                    </li>
+                  </ul>
+              </nav>  
+          </div>
+          {% endblock %}         
+          <div class="grid-x">
+           {% block left %}            
+            <div class="cell large-2 medium-3 margin-top-2 margin-right-2  padding-right-1 shadow user_left_menu">
+                <ul class="vertical menu accordion-menu" data-accordion-menu>
+                    <li>
+                      <a href="#">我的博客</a>
+                      <ul class="menu vertical nested">
+                        <li><a href="#">基本设置</a></li>
+                        <li><a href="{{ path('user_blog_category') }}"  data-route="user_blog_category">博客分类</a></li>
+                        <li><a href="{{ path('user_blog_tag') }}"  data-route="user_blog_tag">博客标签</a></li>
+                        <li><a href="{{ path('user_blog_post') }}" data-route="user_blog_post">博客文章</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#">个人中心</a>
+                      <ul class="menu vartical nested">
+                        <li><a href="{{ path('user_index') }}" data-route="user_index">基本信息</a></li>
+                        <li><a>我的好友</a></li>
+                        <li><a>我的粉丝</a></li>
+                        
+                      </ul>
+                    </li>
+                    <li><a>我的发布</a>
+                      
+                    </li>
+                    <li><a>我的话题</a></li>
+                  </ul>   
+            </div>
+            {% endblock %}
+            {% block right %}  {% endblock %}
+          </div>   
+                 
+      </div>    
+      <!--right-->
+      
+    </div>  
+</div>
+{% block footer %}
+<footer>
+  <div class="callout primary ">
+      <div class="text-center">          
+          <p>
+                      本站总访问量：0
+            <i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次
+          </p>
+          <p>
+            <span> Copyright ©<a href="/" rel="nofollow">Mash(Ma·sh).</a></span>
+            <span> ICP备案:<a rel="nofollow" target="_blank" href="http://www.miitbeian.gov.cn/"> 京ICP备18022754号</a></span>
+            <span> Powered by<a rel="nofollow" target="_blank" href="http://symfony.com/doc/current/index.html"> Symonfy4</a></span>
+          </p>
+        </div>
+  </div>
+</footer>
+{% endblock %}
+{% block js %}
+<script src="/public/js/vendor/jquery.js"></script>
+<script src="/public/js/vendor/what-input.js"></script>
+<script src="/public/js/vendor/foundation.js"></script>
+<script src="/public/js/app.js"></script>
+<script src="/lib/layer/layer.js"></script>
+{% endblock %}
+{% block script %}
+<script>
+  $(function(){
+      //会员中心左侧菜单
+      $('.user_left_menu a').each(function(){
+          var route = "{{ app.request.get('_route') }}";
+          var route_ = $(this).attr('data-route');   
+          var route__ = '';         
+          
+          route = route.split('_');
+          route__ = route[0] +'_'+route[1];
+          if(route[2]){ route__ += '_'+ route[2];}          
+         
+          if(route_ == route__){  
+            $(this).parent().parent().css('display','block');
+            $(this).css('color','red');
+            return false;
+          }
+      })
+  })
+  </script>
+{% endblock %}
+
+</body>
+</html>

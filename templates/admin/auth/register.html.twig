@@ -1,0 +1,77 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foundation for Sites</title>
+<link rel="stylesheet" href="/public/css/foundation.css">
+<link rel="stylesheet" href="/public/icons/foundation-icons.css">
+<link rel="stylesheet" href="/public/css/app.css">
+</head>
+<body>
+
+
+
+<!--main-->
+<div class="grin-container" style="background: url(/public/images/login-register.jpg) center center/cover no-repeat!important; height: 100%; width:100%;position: fixed;">
+    <div class="grid-x" >          
+      <div class="cell">
+          <div class="callout shadow" style="margin:0 auto;max-width:500px;top:30px;">
+              {% for type,messages in app.flashes %}
+              <div class="cell">
+                  <div class="{{ type }} callout" data-closable="slide-out-right">
+                    {% for message in messages %}
+                    <p>{{ message }}</p>
+                    {% endfor %}
+                    <button class="close-button" aria-label="Dismiss alert" type="button" data-close>
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                </div>
+                {% endfor %}    
+              <form action="{{ path('admin_register') }}" method="POST">
+                <div class="grid-x">
+                  <div class="cell">
+                    <label>用户名:
+                      <input type="text" placeholder="用户名" name="username" id="username">                      
+                    </label>                    
+                  </div>                  
+                  <div class="cell">
+                    <label>密码:
+                      <input type="password" placeholder="密码" name="password" id="password">
+                    </label>                   
+                  </div>
+                  <div class="cell">
+                    <lable>确认密码：
+                      <input type="password" placeholder="确认密码" name="password2" id="password2">
+                    </lable>                    
+                  </div>
+                  
+                  <div class="cell">
+                    <input type="hidden" name="token" value="csrf_token('admin-register')" >
+                    <button class="button hollow primary small" type="submit">注册</button>
+                  </div>
+                  <div class="cell">
+                    <a class="float-right" href="{{ path('admin_login') }}">已有账号，去登录</a>                  
+                  </div>
+                </div>
+              </form>
+            </div>
+      </div>
+    </div>
+    
+</div>
+
+
+
+
+
+<script src="/public/js/vendor/jquery.js"></script>
+<script src="/public/js/vendor/what-input.js"></script>
+<script src="/public/js/vendor/foundation.js"></script>
+<script src="/public/js/app.js"></script>
+
+
+</body>
+</html>

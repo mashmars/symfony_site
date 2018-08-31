@@ -24,7 +24,7 @@
                 {{ form_end(form) }}
               <div class="cell margin-bottom-2">
                 <a class="float-right" href="{{ path('login') }}">已有账号，去登录</a>
-                <a class="float-left">忘记密码</a>
+                <a class="float-left" href="{{ path('find_password') }}">忘记密码</a>
               </div>
             </div>
       </div>
@@ -32,23 +32,29 @@
     
 </div>
 {% endblock %}
+{% block footer %}{% endblock %}
 {% block script %}
 <script>
   $(function(){
     $('.send_email').click(function(){
       $(this).prop('disabled',true);
+      var txt = $(this).text();
+      $(this).text('发送中...');
       var email = $('.email').val();
       if(email == ''){
         $(this).prop('disabled',false);
+        $(this).text(txt);
         layer.msg('请输入邮箱',{time:2000,icon:5});
         return false;
       }
-      $.post("{{ path('send_email') }}",{email:email},function(data){
+      $.post("{{ path('send_email') }}",{email:email,'act':'register'},function(data){
         if(data.code == 0){
           layer.msg(data.msg,{time:2000,icon:1});
+          $('.send_email').text(txt);
         }else{
           layer.msg(data.msg,{time:2000,icon:5});
           $('.send_email').prop('disabled',false);
+          $('.send_email').text(txt);
         }
       },'json')
     })

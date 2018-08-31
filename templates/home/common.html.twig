@@ -1,0 +1,208 @@
+<!doctype html>
+<html class="no-js" lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}首页{% endblock %}</title>
+{% block css %}
+<link rel="stylesheet" href="/public/css/foundation.css">
+<link rel="stylesheet" href="/public/icons/foundation-icons.css">
+<link rel="stylesheet" href="/public/css/app.css">
+{% endblock %}
+</head>
+<body>
+
+<!--nav-->
+{% block nav %}
+<div class="top-bar">
+  <div class="top-bar-left">
+    <ul class="menu">
+      <li class="menu-text">站点名称</li>
+    </ul>
+  </div>
+  <div class="top-bar-right">
+    <ul class="dropdown menu" data-dropdown-menu>
+      <li class="is-action"><a href="/">首页</a></li>
+      <li>
+        <a href="#">专辑</a>
+        <ul class="menu vertical">
+          <li><a>专辑一</a></li>
+          <li><a>专辑二</a></li>
+        </ul>
+      </li>
+      <li>
+        <a href="#">话题</a>
+        <ul class="menu vertical">
+          <li><a>话题一</a></li>
+          <li><a>话题二</a></li>
+        </ul>
+      </li>
+      <li>
+          <a href="#">操作说明</a>
+          <ul class="menu vertical">
+            <li><a>分类一</a></li>
+            <li><a>分类二</a></li>
+          </ul>
+        </li>
+      <li><a href="{{ path('blog_index',{'subdomain':app.session.get('subdomain')}) }}">博客中心</a></li>
+      {% if app.user %}      
+      <li>
+        <a href="#">管理中心</a>
+        <ul class="menu vertical">
+          <li><a href="{{ path('user_index') }}">会员中心</a></li>
+          <li><a href="/logout">退出</a></li>
+        </ul>
+      </li>
+      {% else %}
+      <li class="margin-left-3"><a class="button" href="{{ path('login') }}">登录</a></li>
+      <li class="margin-left-1 margin-right-2"><a class="button" href="{{ path('register') }}">注册</a></li>
+      {% endif %}
+    </ul>
+    
+  </div>
+</div>
+{% endblock %}
+<!--main-->
+<div class="grid-container margin-top-1">
+  {% block banner %}{% endblock %}
+    <div class="grid-x grid-margin-x">
+      <!--left-->
+      <div class="cell large-9">
+      {% block breadcrumb %}{% endblock %}
+      {% block main %}{% endblock %}  
+      </div>    
+      <!--right-->
+     <div class="cell large-3">
+      <div class="cell large-3">
+        <div class="callout shadow">
+          {% if app.user %}
+          <!--<div class="cell text-center">            
+            <a href="https://www.gravatar.com/avatar/09243e3df5e9b7f7f0e038b17764786f?s=180&d=mp&r=g" class="th radius" target="_blank">
+              <img src="https://www.gravatar.com/avatar/09243e3df5e9b7f7f0e038b17764786f?s=180&d=mp&r=g" alt="Paris">
+            </a>
+          </div>
+          <div class="cell margin-top-1 text-center">
+              <a class="button small hollow success margin-right-2" href="{{ path('user_index') }}">个人中心</a>
+              <a class="button small hollow alert" href="/logout">退出登陆</a>
+          </div>-->
+          <div class="card-profile-stats">
+            <div class="card-profile-stats-intro">
+              <img class="card-profile-stats-intro-pic" src="https://www.gravatar.com/avatar/09243e3df5e9b7f7f0e038b17764786f?s=180&d=mp&r=g" alt="profile-image" />
+              <div class="card-profile-stats-intro-content">
+                <h3>
+                {% if app.user.domain != app.session.get('subdomain') %}
+                {{ app.user.username }} <a class="button alert small margin-left-3" title="返回我的博客" href="{{ path('blog_index',{'subdomain':app.user.domain }) }}">返回我的博客</a>
+                {% else %}
+                {{ app.user.username }}
+                {% endif %}
+                </h3>
+                <p><small>{{ app.user.getCreatedAt()|date('Y-m-d')}} 加入</small></p>
+              </div> <!-- /.card-profile-stats-intro-content -->
+            </div> <!-- /.card-profile-stats-intro -->
+
+            <hr />
+
+            <div class="card-profile-stats-container">
+              <div class="card-profile-stats-statistic">
+                <span class="stat">25</span>
+                <p>posts</p>
+              </div> <!-- /.card-profile-stats-statistic -->
+              <div class="card-profile-stats-statistic">
+                <span class="stat">125</span>
+                <p>followers</p>
+              </div> <!-- /.card-profile-stats-statistic -->
+              <div class="card-profile-stats-statistic">
+                <span class="stat">88</span>
+                <p>likes</p>
+              </div> <!-- /.card-profile-stats-statistic -->
+            </div> <!-- /.card-profile-stats-container -->
+
+            <div class="card-profile-stats-more">
+              <p class="card-profile-stats-more-link"><a href="#"><i class="arrow-down fa fa-angle-down" aria-hidden="true"></i></a></p>
+              <div class="card-profile-stats-more-content">
+                <p>
+                  {{ app.user.resume }}
+                </p>
+              </div> <!-- /.card-profile-stats-more-content -->
+            </div> <!-- /.card-profile-stats-more -->
+          </div> <!-- /.card-profile-stats -->
+
+
+          {% else %}
+          <form action="{{ path('login') }}" method="post">
+            <div class="cell">
+              <label>用户名
+                <input type="text" placeholder="请输入用户名" name="_username">
+              </label>
+            </div>
+            <div class="cell">
+              <label>密码
+                <input type="password" placeholder="请输入登录密码" name="_password">
+              </label>
+            </div>
+            <div class="cell">
+              <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+              <button type="submit" class="button">登录</button>
+            </div>
+          </form>
+          {% endif %}
+        </div>
+         {% block right %}
+        <div class="callout shadow">
+          <h6 >最新动态</h6>
+          <ul class="list-circle">
+            <li><a>这是标题</a></li>
+            <li><a>这是标题</a></li>
+            <li><a>这是标题</a></li>
+          </ul>
+        </div>
+
+        <div class="callout shadow">
+          <h6>热门信息</h6>
+          <ul class="list-circle">
+              <li><a>这是标题</a></li>
+              <li><a>这是标题</a></li>
+              <li><a>这是标题</a></li>
+            </ul>
+        </div>
+        <div class="callout shadow">
+            <h6>友情链接</h6>
+            <ul class="list-circle">
+                <li><a>这是标题</a></li>
+                <li><a>这是标题</a></li>
+                <li><a>这是标题</a></li>
+              </ul>
+        </div>
+        {% endblock %}
+      </div>
+      
+      </div> 
+</div>
+{% block footer %}
+<footer>
+  <div class="callout primary ">
+      <div class="text-center">          
+          <p>
+                      本站总访问量：0
+            <i id="busuanzi_container_site_pv"><i id="busuanzi_value_site_pv"></i></i>次
+          </p>
+          <p>
+            <span> Copyright ©<a href="/" rel="nofollow">Mash(Ma·sh).</a></span>
+            <span> ICP备案:<a rel="nofollow" target="_blank" href="http://www.miitbeian.gov.cn/"> 京ICP备18022754号</a></span>
+            <span> Powered by<a rel="nofollow" target="_blank" href="http://symfony.com/doc/current/index.html"> Symonfy4</a></span>
+          </p>
+        </div>
+  </div>
+</footer>
+{% endblock %}
+{% block js %}
+<script src="/public/js/vendor/jquery.js"></script>
+<script src="/public/js/vendor/what-input.js"></script>
+<script src="/public/js/vendor/foundation.js"></script>
+<script src="/public/js/app.js"></script>
+<script src="/lib/layer/layer.js"></script>
+{% endblock %}
+{% block script %}{% endblock %}
+</body>
+</html>

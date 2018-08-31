@@ -1,0 +1,299 @@
+{% extends 'home/common.html.twig' %}
+{% block title %}首页{% endblock %}
+      {% block main %}
+          <div class="cell">
+              <div class="orbit" role="region" aria-label="Favorite Space Pictures" data-orbit>
+                  <div class="orbit-wrapper">
+                    <div class="orbit-controls">
+                      <button class="orbit-previous"><span class="show-for-sr">Previous Slide</span>&#9664;&#xFE0E;</button>
+                      <button class="orbit-next"><span class="show-for-sr">Next Slide</span>&#9654;&#xFE0E;</button>
+                    </div>
+                    <ul class="orbit-container">
+                      <li class="is-active orbit-slide">
+                        <figure class="orbit-figure">
+                          <img class="orbit-image" src="/home/images/1.jpg" alt="Space">
+                          <figcaption class="orbit-caption">Space, the final frontier.</figcaption>
+                        </figure>
+                      </li>
+                      <li class="orbit-slide">
+                        <figure class="orbit-figure">
+                          <img class="orbit-image" src="/home/images/2.jpg" alt="Space">
+                          <figcaption class="orbit-caption">Lets Rocket!</figcaption>
+                        </figure>
+                      </li>                  
+                    </ul>
+                  </div>
+                  <!-- <nav class="orbit-bullets">
+                    <button class="is-active" data-slide="0"><span class="show-for-sr">First slide details.</span><span class="show-for-sr">Current Slide</span></button>
+                    <button data-slide="1"><span class="show-for-sr">Second slide details.</span></button>
+                  </nav> -->
+                </div>
+          </div>
+          <div class="cell margin-top-1">
+              <ul class="tabs" data-tabs id="example-tabs">
+                  <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">Tab 1</a></li>
+                  <li class="tabs-title"><a data-tabs-target="panel2" href="#panel2">Tab 2</a></li>
+              </ul>
+              <div class="tabs-content" data-tabs-content="example-tabs">
+                <div class="tabs-panel is-active" id="panel1">
+                  <div class="grid-x largin-up-4 medium-3 ">
+                    <div class="card margin-right-1 ">
+                      <div class="card-section">
+                        <img src="/home/images/3.jpg">
+                      </div>
+                      <div class="card-section">
+                        <p>阿萨德是是</p>
+                        <label class="label">1 收藏</label>
+                        <label class="label">1 点击</label>
+                        <label class="label">1 评论</label>
+                       
+                        <div class="media-object  margin-top-1">
+                          <div class="media-object-section">
+                            <div class="thumbnail">
+                              <img src= "/home/images/no_header.jpg">
+                            </div>
+                          </div>
+                          <div class="media-object-section main-section">
+                            昵称 发表于 xxxxx 
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card margin-right-1 ">
+                      <div class="card-section">
+                        <img src="/home/images/3.jpg">
+                      </div>
+                      <div class="card-section">
+                        <p>阿萨德是是</p>
+                        <label class="label">1 收藏</label>
+                        <label class="label">1 点击</label>
+                        <label class="label">1 评论</label>
+                       
+                        <div class="media-object  margin-top-1">
+                          <div class="media-object-section">
+                            <div class="thumbnail">
+                              <img src= "/home/images/no_header.jpg">
+                            </div>
+                          </div>
+                          <div class="media-object-section main-section">
+                            昵称 发表于 xxxxx 
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card margin-right-1 ">
+                      <div class="card-section">
+                        <img src="/home/images/3.jpg">
+                      </div>
+                      <div class="card-section">
+                        <p>阿萨德是是</p>
+                        <label class="label">1 收藏</label>
+                        <label class="label">1 点击</label>
+                        <label class="label">1 评论</label>
+                       
+                        <div class="media-object  margin-top-1">
+                          <div class="media-object-section">
+                            <div class="thumbnail">
+                              <img src= "/home/images/no_header.jpg">
+                            </div>
+                          </div>
+                          <div class="media-object-section main-section">
+                            昵称 发表于 xxxxx 
+                          </div>
+                        </div>
+                      </div>
+                    </div>  
+                    <div class="card margin-right-1 ">
+                        <div class="card-section">
+                          <img src="/home/images/3.jpg">
+                        </div>
+                        <div class="card-section">
+                          <p>阿萨德是是</p>
+                          <label class="label">1 收藏</label>
+                          <label class="label">1 点击</label>
+                          <label class="label">1 评论</label>
+                         
+                          <div class="media-object  margin-top-1">
+                            <div class="media-object-section">
+                              <div class="thumbnail">
+                                <img src= "/home/images/no_header.jpg">
+                              </div>
+                            </div>
+                            <div class="media-object-section main-section">
+                              昵称 发表于 xxxxx 
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card margin-right-1 ">
+                        <div class="card-section">
+                          <img src="/home/images/3.jpg">
+                        </div>
+                        <div class="card-section">
+                          <p>阿萨德是是</p>
+                          <label class="label">1 收藏</label>
+                          <label class="label">1 点击</label>
+                          <label class="label">1 评论</label>
+                         
+                          <div class="media-object  margin-top-1">
+                            <div class="media-object-section">
+                              <div class="thumbnail">
+                                <img src= "/home/images/no_header.jpg">
+                              </div>
+                            </div>
+                            <div class="media-object-section main-section">
+                              昵称 发表于 xxxxx 
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                     
+                  </div>
+                </div>
+                <div class="tabs-panel" id="panel2">
+                  <p>2</p>
+                </div>
+              </div>
+          </div>
+
+          <div class="cell margin-top-1">
+            最新blog
+            <div class="grid-x shadow padding-1 margin-top-1">
+                <div class="cell large-2">
+                  <p>
+                      <img src= "https://placeimg.com/150/150/people">
+                  </p>
+                </div>
+                <div class="cell large-10">
+                    <h4>Dreams feel real while we're in them.</h4>
+                    <p class="subheader">
+                        <a class="margin-right-1"><span><i class="fi-torso"> 作者</i>  </span></a>
+                        <a class="margin-right-1"><span><i class="fi-checkbox"> 分类</i> </span></a>
+                        <a class="margin-right-1"><span><i class="fi-calendar"> 2018-08-20</i></span></a>
+                        <a class="margin-right-1"><span><i class="fi-eye"> 6 阅读</i></span> </a>
+                        <a class="margin-right-1"><span><i class="fi-comments"> 6 评论</i></span></a>
+                    </p>
+                  <p>I'm going to improvise. Listen, there's something you should know about me... about inception. An idea is like a virus, resilient, highly contagious. The smallest seed of an idea can grow. It can grow to define or destroy you.</p>
+                  <p class="float-right">
+                      <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签</a>
+                      <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签2</a>
+                      <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签3</a>
+                      <a class="margin-left-2">查看详情</a>
+                  </p>                 
+                </div>
+              </div>
+              <div class="grid-x shadow padding-1 margin-top-1">
+                  <div class="cell large-2">
+                    <p>
+                        <img src= "https://placeimg.com/150/150/people">
+                    </p>
+                  </div>
+                  <div class="cell large-10">
+                      <h4>Dreams feel real while we're in them.</h4>
+                      <p class="subheader">
+                          <a class="margin-right-1"><span><i class="fi-torso"> 作者</i>  </span></a>
+                          <a class="margin-right-1"><span><i class="fi-checkbox"> 分类</i> </span></a>
+                          <a class="margin-right-1"><span><i class="fi-calendar"> 2018-08-20</i></span></a>
+                          <a class="margin-right-1"><span><i class="fi-eye"> 6 阅读</i></span> </a>
+                          <a class="margin-right-1"><span><i class="fi-comments"> 6 评论</i></span></a>
+                      </p>
+                    <p>I'm going to improvise. Listen, there's something you should know about me... about inception. An idea is like a virus, resilient, highly contagious. The smallest seed of an idea can grow. It can grow to define or destroy you.</p>
+                    <p class="float-right">
+                        <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签</a>
+                        <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签2</a>
+                        <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签3</a>
+                        <a class="margin-left-2">查看详情</a>
+                    </p>                 
+                  </div>
+                </div>
+            <div class="grid-x shadow padding-1 margin-top-1">
+              <div class="cell large-2">
+                <p>
+                    <img src= "https://placeimg.com/150/150/people">
+                </p>
+              </div>
+              <div class="cell large-10">
+                  <h4>Dreams feel real while we're in them.</h4>
+                  <p class="subheader">
+                      <a class="margin-right-1"><span><i class="fi-torso"> 作者</i>  </span></a>
+                      <a class="margin-right-1"><span><i class="fi-checkbox"> 分类</i> </span></a>
+                      <a class="margin-right-1"><span><i class="fi-calendar"> 2018-08-20</i></span></a>
+                      <a class="margin-right-1"><span><i class="fi-eye"> 6 阅读</i></span> </a>
+                      <a class="margin-right-1"><span><i class="fi-comments"> 6 评论</i></span></a>
+                  </p>
+                <p>I'm going to improvise. Listen, there's something you should know about me... about inception. An idea is like a virus, resilient, highly contagious. The smallest seed of an idea can grow. It can grow to define or destroy you.</p>
+                <p class="float-right">
+                    <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签</a>
+                    <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签2</a>
+                    <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签3</a>
+                    <a class="margin-left-2">查看详情</a>
+                </p>                 
+              </div>
+            </div>
+          </div>
+          <div class="cell margin-top-1">
+            新闻动态
+            <div class="grid-x">
+                <div class="cell large-6 medium-6">
+                    <div class="media-object">
+                      <div class="media-object-section">
+                        <img class="thumbnail" src="https://placehold.it/100x100">
+                      </div>
+                      <div class="media-object-section">
+                        <h5>Nunc Eu Ullamcorper Orci</h5>
+                        <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
+                      </div>
+                    </div>
+                    <div class="media-object">
+                        <div class="media-object-section">
+                          <img class="thumbnail" src="https://placehold.it/100x100">
+                        </div>
+                        <div class="media-object-section">
+                          <h5>Nunc Eu Ullamcorper Orci</h5>
+                          <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
+                        </div>
+                      </div>
+                      <div class="media-object">
+                          <div class="media-object-section">
+                            <img class="thumbnail" src="https://placehold.it/100x100">
+                          </div>
+                          <div class="media-object-section">
+                            <h5>Nunc Eu Ullamcorper Orci</h5>
+                            <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
+                          </div>
+                        </div>
+                </div>
+                <div class="cell large-6 medium-6">
+                    <div class="media-object">
+                      <div class="media-object-section">
+                        <img class="thumbnail" src="https://placehold.it/100x100">
+                      </div>
+                      <div class="media-object-section">
+                        <h5>Nunc Eu Ullamcorper Orci</h5>
+                        <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
+                      </div>
+                    </div>
+                    <div class="media-object">
+                        <div class="media-object-section">
+                          <img class="thumbnail" src="https://placehold.it/100x100">
+                        </div>
+                        <div class="media-object-section">
+                          <h5>Nunc Eu Ullamcorper Orci</h5>
+                          <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
+                        </div>
+                      </div>
+                      <div class="media-object">
+                          <div class="media-object-section">
+                            <img class="thumbnail" src="https://placehold.it/100x100">
+                          </div>
+                          <div class="media-object-section">
+                            <h5>Nunc Eu Ullamcorper Orci</h5>
+                            <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
+                          </div>
+                        </div>
+                </div> 
+                               
+            </div>
+          </div>
+      {% endblock %}
+      

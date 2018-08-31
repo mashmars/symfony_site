@@ -30,13 +30,17 @@
                     </label>                    
                   </div>
                   <div class="cell">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+                    {% if app.request.get('_target_path') %} <!--登陆后跳转-->
+                    <input type="hidden" name="_target_path" value="{{ app.request.get('_target_path') }}" />
+                    {% endif %}
                     <button class="button hollow primary small" type="submit">登陆</button>
                   </div>                 
                 </div>
               </form>
               <div class="cell margin-bottom-3">
                 <a class="float-right" href="{{ path('register') }}">没有账号，请先注册</a>
-                <a class="float-left">忘记密码</a>
+                <a class="float-left" href="{{ path('find_password') }}">忘记密码</a>
               </div>
             </div>
       </div>
@@ -44,3 +48,4 @@
     
 </div>
 {% endblock %}
+{% block footer %}{% endblock %}
