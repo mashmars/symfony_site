@@ -191,6 +191,7 @@ class User implements UserInterface , \Serializable //注册用 , \Serializable 
         $this->count_post = 0;
         $this->count_follower = 0;
         $this->count_like = 0;
+        $this->createDomain();
     }
     /**
      * @ORM\PreUpdate
@@ -201,6 +202,21 @@ class User implements UserInterface , \Serializable //注册用 , \Serializable 
         //设置默认昵称
         if(!$this->nickname){
             $this->nickname = '小飞侠';
+        }
+    }
+    public function createDomain()
+    {
+        $regex = '/^[ a-z0-9]$/i';        
+        if(preg_match($regex, $this->username)){
+            //符合条件的情况，如果处理不符合的情况，在Else里面进行处理;
+            $this->domain = $this->username ;
+        }else{
+            $domain = '';
+            $str = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            for($i= 1; $i<= 6; ++$i) {
+                $domain.=$str[mt_rand(0, 35)];
+            }
+            $this->domain = $domain;
         }
     }
     /**

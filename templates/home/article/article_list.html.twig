@@ -1,0 +1,79 @@
+{% extends 'home/common.html.twig' %}
+{% block breadcrumbs %}
+          <div class="grid-x">
+              <nav aria-label="You are here:" role="navigation">
+                  <ul class="breadcrumbs">
+                    <li><a href="#0">Home</a></li>
+                    <li><a href="#0">Features</a></li>                    
+                    <li>
+                      <span class="show-for-sr">Current: </span> Cloning
+                    </li>
+                  </ul>
+              </nav>  
+          </div>
+{% endblock %}
+{% block main %}
+          <div class="grid-x">            
+            <div class="cell large-4 medium-5 margin-top-3  padding-right-1">
+                <ul class="vertical menu accordion-menu" data-accordion-menu>
+                    <li>
+                      <a href="#">分类一</a>
+                      <ul class="menu vertical nested">
+                        <li><a href="#">分类二</a></li>
+                        <li><a href="#">分类三</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="#">分类四</a></li>
+                  </ul>   
+            </div>
+            <div class="cell large-8 medium-7">                
+                <div class="grid-x">
+                  <div class="cell">
+                      <div class="media-object">
+                          <div class="media-object-section">
+                            <img class="thumbnail" src="https://placehold.it/100x100">
+                          </div>
+                          <div class="media-object-section">                            
+                            <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
+                          </div>
+                      </div>
+                      <div class="media-object">
+                          <div class="media-object-section">
+                            <img class="thumbnail" src="https://placehold.it/100x100">
+                          </div>
+                          <div class="media-object-section">                            
+                            <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
+                          </div>
+                      </div>
+                      <div class="media-object">
+                          <div class="media-object-section">
+                            <img class="thumbnail" src="https://placehold.it/100x100">
+                          </div>
+                          <div class="media-object-section">                            
+                            <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
+                          </div>
+                      </div>
+                      <div class="media-object">
+                          <div class="media-object-section">
+                            <img class="thumbnail" src="https://placehold.it/100x100">
+                          </div>
+                          <div class="media-object-section">                            
+                            <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+                <ul class="pagination" role="navigation" aria-label="Pagination">
+                    <li class="disabled">Previous <span class="show-for-sr">page</span></li>
+                    <li class="current"><span class="show-for-sr">You're on page</span> 1</li>
+                    <li><a href="#0" aria-label="Page 2">2</a></li>
+                    <li><a href="#0" aria-label="Page 3">3</a></li>
+                    <li><a href="#0" aria-label="Page 4">4</a></li>
+                    <li class="ellipsis" aria-hidden="true"></li>
+                    <li><a href="#0" aria-label="Page 12">12</a></li>
+                    <li><a href="#0" aria-label="Page 13">13</a></li>
+                    <li><a href="#0" aria-label="Next page">Next <span class="show-for-sr">page</span></a></li>
+                  </ul>
+            </div>
+          </div>   
+ {% endblock %}

@@ -39,11 +39,12 @@
         </ul>
       </li>
       <li>
-          <a href="#">操作说明</a>
+          <a href="{{ path('article_index') }}">网站指引</a>
           <ul class="menu vertical">
-            <li><a>分类一</a></li>
-            <li><a>分类二</a></li>
-          </ul>
+          {% for category in article_category %}
+            <li><a>{{ category.name }}</a></li>
+            {% endfor %}
+          </ul> 
         </li>
       <li><a href="{{ path('blog_index',{'subdomain':app.session.get('subdomain')}) }}">博客中心</a></li>
       {% if app.user %}      

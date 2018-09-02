@@ -72,10 +72,16 @@
                 <td>{{ article.category.name }}</td>
                 <td>{{ article.title }}</td>
                 <td>{{ article.thumb }}</td>
-                <td>{{ article.status }}</td>
+                <td>
+                {% if article.status %}
+                <span class="label success small">显示</span>
+                {% else %}
+                <span class="label alert small">不显示</span>
+                {% endif %}
+                </td>
                 <td>{{ article.views }}</td>
-                <td>{{ article.created_at|date('Y-m-d') }}</td>
-                <td>{{ category.updated_at|date('Y-m-d') }}</td>                
+                <td>{{ article.getCreatedAt()|date('Y-m-d') }}</td>
+                <td>{{ article.getUpdatedAt()|date('Y-m-d') }}</td>                
                 <td>
                   <a class="label small pointer" href="{{ path('article_edit',{'slug':article.id}) }}"><i class="fi-pencil"></i> 编辑</a>
                   <a class="label small alert pointer" href="{{ path('article_delete',{'slug':article.id}) }}"><i class="fi-trash"></i> 删除</a>

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Article
 {
@@ -63,6 +64,23 @@ class Article
      */
     private $content;
 
+    /**
+     * @ORM\PrePersist()
+     */
+    public function setInitValue()
+    {
+        $this->status =1;
+        $this->views=0;
+        $this->created_at = new \Datetime();
+        $this->updated_at = new \Datetime();
+    }
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function setUpdatedValue()
+    {
+        $this->updated_at = new \Datetime();
+    }
     public function getId()
     {
         return $this->id;

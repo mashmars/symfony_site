@@ -11,7 +11,7 @@ use App\Entity\ArticleCategory;
 use App\Form\Admin\ArticleCategoryType;
 
 use App\Entity\Article;
-
+use App\Form\Admin\ArticleType;
 
 /**
  * @Route("/admin-article-")
@@ -107,23 +107,59 @@ class ArticleController extends BaseController
     /**
      * @Route("article-add",name="article_add")
      */
-    public function article_add()
+    public function article_add(Request $request)
     {
-        return $this->render('admin/article/article_add.html.twig');
+        $article = new Article();
+        $form = $this->createForm(ArticleType::class,$article);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($article);
+            $entityManager->flush();
+            $this->addFlash('success','文章添加成功');
+            return $this->redirectToRoute('article_add');
+        }
+        return $this->render('admin/article/article_add.html.twig',[
+            'form'=>$form->createView(),
+        ]);
     }
     /**
      * @Route("article-{slug}-edit",name="article_edit")
      */
-    public function article_edit()
+    public function article_edit($slug,Request $request)
     {
-        return $this->render('admin/article/article_edit.html.twig');
+        $entityManager = $this->getDoctrine()->getManager();
+        $repository = $entityManager->getRepository(Article::Class);
+        $article = $repository->find($slug);
+        if(!$article)
+        {
+            throw $this->createNotFoundException('没有找到相关文章');
+        }
+        $form = $this->createForm(ArticleType::class,$article);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid())
+        {
+            $entityManager->flush();
+            $this->addFlash('success','文章编辑成功');
+            return $this->redirectToRoute('article_edit',['slug'=>$slug]);
+        }
+        return $this->render('admin/article/article_edit.html.twig',[
+            'form'=>$form->createView(),
+        ]);
     }
     /**
      * @Route("article-{slug}-delete",name="article_delete")
      */
-    public function article_delete()
+    public function article_delete($slug)
     {
-        return $this->render('admin/article/article_edit.html.twig');
+        $entityManager = $this->getDoctrine()->getManager();
+        $repository = $entityManager->getRepository(Article::class);
+        $article = $repository->find($slug);
+        $entityManager->remove($article);
+        $entityManager->flush();
+        $this->addFlash('success','文章删除成功');
+        return $this->redirectToRoute('article_index');        
     }
 
 
