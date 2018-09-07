@@ -13,8 +13,10 @@ use App\Form\Admin\ArticleCategoryType;
 use App\Entity\Article;
 use App\Form\Admin\ArticleType;
 
+use App\Services\FileUploader;
+use Symfony\Component\HttpFoundation\File\File;
 /**
- * @Route("/admin-article-")
+ * @Route("/admin-article-",name="admin_")
  */
 class ArticleController extends BaseController
 {
@@ -43,7 +45,7 @@ class ArticleController extends BaseController
             $entityManager->persist($category);
             $entityManager->flush();
             $this->addFlash('success','分类添加成功');
-            return $this->redirectToRoute('category_add');
+            return $this->redirectToRoute('admin_category_add');
         }
         return $this->render('admin/article/category_add.html.twig',[
             'form'=>$form->createView(),
@@ -66,7 +68,7 @@ class ArticleController extends BaseController
         {
             $entityManager->flush();
             $this->addFlash('success','分类编辑成功');
-            return $this->redirectToRoute('category_edit',['slug'=>$slug]);
+            return $this->redirectToRoute('admin_category_edit',['slug'=>$slug]);
         }
         return $this->render('admin/article/category_edit.html.twig',[
             'form'=>$form->createView(),
@@ -86,7 +88,7 @@ class ArticleController extends BaseController
         $entityManager->remove($category);
         $entityManager->flush();
         $this->addFlash('success','分类删除成功');
-        return $this->redirectToRoute('category_index');
+        return $this->redirectToRoute('admin_category_index');
     }
 
     ///////////////文章
@@ -95,7 +97,7 @@ class ArticleController extends BaseController
      */
     public function article_index($page)
     {
-        $limit = 2;
+        $limit = 10;
         $repository = $this->getDoctrine()->getManager()->getRepository(Article::class);
         $queryBuilder = $repository->createQueryBuilder('u')->orderBy('u.id','desc');
         $paginator = $this->get('knp_paginator');
@@ -107,18 +109,29 @@ class ArticleController extends BaseController
     /**
      * @Route("article-add",name="article_add")
      */
-    public function article_add(Request $request)
+    public function article_add(Request $request,FileUploader $fileUploader)
     {
         $article = new Article();
         $form = $this->createForm(ArticleType::class,$article);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
         {
+            //$file = $article->getThumb(); //上面这个无效
+            $file = $form->get('thumb')->getData();
+            if($file){
+                $filename = $fileUploader->upload($file);
+                $filename = $request->getSchemeAndHttpHost() . '/' . $this->getParameter('upload.directory') . $filename;
+            }else{
+                $ss = mt_rand(1000000,9999999);
+                $filename = 'https://www.gravatar.com/avatar/'.md5($ss).'?s=150&d=identicon&r=g';
+            }
+           
+            $article->setThumb($filename);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($article);
             $entityManager->flush();
             $this->addFlash('success','文章添加成功');
-            return $this->redirectToRoute('article_add');
+            return $this->redirectToRoute('admin_article_add');
         }
         return $this->render('admin/article/article_add.html.twig',[
             'form'=>$form->createView(),
@@ -127,7 +140,7 @@ class ArticleController extends BaseController
     /**
      * @Route("article-{slug}-edit",name="article_edit")
      */
-    public function article_edit($slug,Request $request)
+    public function article_edit($slug,Request $request,FileUploader $fileUploader)
     {
         $entityManager = $this->getDoctrine()->getManager();
         $repository = $entityManager->getRepository(Article::Class);
@@ -136,13 +149,33 @@ class ArticleController extends BaseController
         {
             throw $this->createNotFoundException('没有找到相关文章');
         }
+        $oldimg = $article->getThumb();
+        if($oldimg){
+            //$article->setThumb(new File($article->getThumb()));
+        }
         $form = $this->createForm(ArticleType::class,$article);
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
         {
+            $file = $form->get('thumb')->getData();
+            if($file){
+                $filename = $fileUploader->upload($file);
+                $filename = $request->getSchemeAndHttpHost() . '/' . $this->getParameter('upload.directory') . $filename;
+                //删除原来的
+                @unlink($oldimg);
+            }else{
+                if(!$oldimg){
+                    $ss = mt_rand(1000000,9999999);
+                    $oldimg = 'https://www.gravatar.com/avatar/'.md5($ss).'?s=150&d=identicon&r=g';
+                }
+                $filename = $oldimg;
+            }
+            
+            $article->setThumb($filename);
+
             $entityManager->flush();
             $this->addFlash('success','文章编辑成功');
-            return $this->redirectToRoute('article_edit',['slug'=>$slug]);
+            return $this->redirectToRoute('admin_article_edit',['slug'=>$slug]);
         }
         return $this->render('admin/article/article_edit.html.twig',[
             'form'=>$form->createView(),
@@ -156,10 +189,15 @@ class ArticleController extends BaseController
         $entityManager = $this->getDoctrine()->getManager();
         $repository = $entityManager->getRepository(Article::class);
         $article = $repository->find($slug);
+
         $entityManager->remove($article);
         $entityManager->flush();
+
+        if($article->getThumb()){
+            @unlink($article->getThumb());
+        }
         $this->addFlash('success','文章删除成功');
-        return $this->redirectToRoute('article_index');        
+        return $this->redirectToRoute('admin_article_index');        
     }
 
 

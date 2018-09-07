@@ -39,6 +39,7 @@ class Post
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\File(mimeTypes={"image/png","image/jpeg"})
      */
     private $thumb;
 
@@ -97,6 +98,13 @@ class Post
         $this->views = 0;
         $this->tags = new ArrayCollection();
         $this->comments = new ArrayCollection();
+    }
+    /**
+     * upload
+     */
+    public function getWebPath()
+    {
+        return $this->thumb;
     }
     /**
      * @ORM\PrePersist

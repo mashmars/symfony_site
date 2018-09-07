@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
@@ -30,6 +31,7 @@ class ArticleType extends AbstractType
                 ])
                 ->add('title',TextType::class,['label'=>'文章标题'])
                 ->add('descript',TextareaType::class,['label'=>'文章描述'])
+                ->add('thumb',FileType::class,['label'=>'缩略图','image_property' => 'webPath','data_class'=>null])
                 ->add('status',ChoiceType::class,[
                     'label'=>'是否显示',
                     'choices'=>[

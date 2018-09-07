@@ -47,4 +47,26 @@ class ArticleRepository extends ServiceEntityRepository
         ;
     }
     */
+    //上一篇
+    public function findOnePrevById($id)
+    {
+        return $this->createQueryBuilder('u')
+            ->where("u.status=1")
+            ->andWhere('u.id < :id')
+            ->setParameter('id',$id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+    //下一篇
+    public function findOneNextById($id)
+    {
+        return $this->createQueryBuilder('u')
+            ->where("u.status=1")
+            ->andWhere('u.id > :id')
+            ->setParameter('id',$id)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

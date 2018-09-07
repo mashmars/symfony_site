@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Security;
  */
 class BlogController extends BaseController
 {
-    private $limit = 3;
+    private $limit = 5;
     private $categorys ; //分类
     private $tags; //标签
     private $post_hot ; //热门博客文章
@@ -74,6 +74,7 @@ class BlogController extends BaseController
     public function blog_post($page,Request $request)
     {               
         $this->common($request);
+        $this->common_base();
         $queryBuilder = $this->getDoctrine()->getManager()->getRepository(Post::class)->createQueryBuilder('u')
                         ->where('u.userid = :userid')->andWhere('u.status=1')->setParameter('userid',$this->userinfo['userid']);
         $paginator = $this->get('knp_paginator');
@@ -83,6 +84,7 @@ class BlogController extends BaseController
             'categorys' => $this->categorys,
             'tags'  => $this->tags,
             'post_hot' => $this->post_hot,
+            'article_category'  =>  $this->article_category,
         ]);
     }
 
@@ -93,6 +95,7 @@ class BlogController extends BaseController
     public function blog_post_by_category($name,$id,$page,Request $request)
     {
         $this->common($request);
+        $this->common_base();
         $queryBuilder = $this->getDoctrine()->getManager()->getRepository(Post::class)->createQueryBuilder('u')
                         ->where('u.category = :id')->andWhere('u.userid = :userid')->andWhere('u.status=1')
                         ->setParameter('id',$id)->setParameter('userid',$this->userinfo['userid']);
@@ -103,6 +106,7 @@ class BlogController extends BaseController
             'categorys' => $this->categorys,
             'tags'  => $this->tags,
             'post_hot' => $this->post_hot,
+            'article_category'  =>  $this->article_category,
         ]);
     }
     /**
@@ -111,6 +115,7 @@ class BlogController extends BaseController
     public function blog_post_by_tag($name,$id,$page,Request $request)
     {
         $this->common($request);
+        $this->common_base();
         /* $queryBuilder = $this->getDoctrine()->getManager()->getRepository(Post::class)->createQueryBuilder('u')
                         ->where('u.tag = :id')->andWhere('u.userid = :userid')
                         ->setParameter('id',$id)->setParameter('userid',$this->userinfo['userid']); */
@@ -123,6 +128,7 @@ class BlogController extends BaseController
             'categorys' => $this->categorys,
             'tags'  => $this->tags,
             'post_hot' => $this->post_hot,
+            'article_category'  =>  $this->article_category,
         ]);
     }
 
@@ -133,6 +139,7 @@ class BlogController extends BaseController
     {
         
         $this->common($request);
+        $this->common_base();
         $entityManager = $this->getDoctrine()->getManager();
         $repository = $entityManager->getRepository(Post::class);
         $post = $repository->find($id);
@@ -161,6 +168,7 @@ class BlogController extends BaseController
             'categorys' => $this->categorys,
             'tags'  => $this->tags,
             'post_hot' => $this->post_hot,
+            'article_category'  =>  $this->article_category,
         ]);
     }
 

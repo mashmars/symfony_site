@@ -143,6 +143,36 @@ class User implements UserInterface , \Serializable //注册用 , \Serializable 
      * @ORM\Column(type="integer", nullable=true)
      */
     private $count_like;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TopicComment", mappedBy="userid")
+     */
+    private $topicComments;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\TopicCommentLike", mappedBy="userid")
+     */
+    private $topicCommentLikes;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Topic", mappedBy="userid")
+     */
+    private $topics;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Album", mappedBy="userid")
+     */
+    private $albums;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\AlbumCollect", mappedBy="userid")
+     */
+    private $album;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\AlbumComment", mappedBy="userid")
+     */
+    private $albumComments;
     /**
      * 注册新增 start
      */
@@ -154,7 +184,13 @@ class User implements UserInterface , \Serializable //注册用 , \Serializable 
         $this->categories = new ArrayCollection();
         $this->tags = new ArrayCollection();
         $this->posts = new ArrayCollection();
-        $this->comments = new ArrayCollection();        
+        $this->comments = new ArrayCollection();
+        $this->topicComments = new ArrayCollection();
+        $this->topicCommentLikes = new ArrayCollection();
+        $this->topics = new ArrayCollection();
+        $this->albums = new ArrayCollection();
+        $this->album = new ArrayCollection();
+        $this->albumComments = new ArrayCollection();        
     }
     public function getPlainPassword()
     {
@@ -591,6 +627,169 @@ class User implements UserInterface , \Serializable //注册用 , \Serializable 
     public function setCountLike(?int $count_like): self
     {
         $this->count_like = $count_like;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TopicComment[]
+     */
+    public function getTopicComments(): Collection
+    {
+        return $this->topicComments;
+    }
+
+    public function addTopicComment(TopicComment $topicComment): self
+    {
+        if (!$this->topicComments->contains($topicComment)) {
+            $this->topicComments[] = $topicComment;
+            $topicComment->setUserid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTopicComment(TopicComment $topicComment): self
+    {
+        if ($this->topicComments->contains($topicComment)) {
+            $this->topicComments->removeElement($topicComment);
+            // set the owning side to null (unless already changed)
+            if ($topicComment->getUserid() === $this) {
+                $topicComment->setUserid(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|TopicCommentLike[]
+     */
+    public function getTopicCommentLikes(): Collection
+    {
+        return $this->topicCommentLikes;
+    }
+
+    public function addTopicCommentLike(TopicCommentLike $topicCommentLike): self
+    {
+        if (!$this->topicCommentLikes->contains($topicCommentLike)) {
+            $this->topicCommentLikes[] = $topicCommentLike;
+            $topicCommentLike->setUserid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTopicCommentLike(TopicCommentLike $topicCommentLike): self
+    {
+        if ($this->topicCommentLikes->contains($topicCommentLike)) {
+            $this->topicCommentLikes->removeElement($topicCommentLike);
+            // set the owning side to null (unless already changed)
+            if ($topicCommentLike->getUserid() === $this) {
+                $topicCommentLike->setUserid(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Topic[]
+     */
+    public function getTopics(): Collection
+    {
+        return $this->topics;
+    }
+
+    public function addTopic(Topic $topic): self
+    {
+        if (!$this->topics->contains($topic)) {
+            $this->topics[] = $topic;
+            $topic->setUserid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTopic(Topic $topic): self
+    {
+        if ($this->topics->contains($topic)) {
+            $this->topics->removeElement($topic);
+            // set the owning side to null (unless already changed)
+            if ($topic->getUserid() === $this) {
+                $topic->setUserid(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Album[]
+     */
+    public function getAlbums(): Collection
+    {
+        return $this->albums;
+    }
+
+    public function addAlbum(Album $album): self
+    {
+        if (!$this->albums->contains($album)) {
+            $this->albums[] = $album;
+            $album->setUserid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlbum(Album $album): self
+    {
+        if ($this->albums->contains($album)) {
+            $this->albums->removeElement($album);
+            // set the owning side to null (unless already changed)
+            if ($album->getUserid() === $this) {
+                $album->setUserid(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AlbumCollect[]
+     */
+    public function getAlbum(): Collection
+    {
+        return $this->album;
+    }
+
+    /**
+     * @return Collection|AlbumComment[]
+     */
+    public function getAlbumComments(): Collection
+    {
+        return $this->albumComments;
+    }
+
+    public function addAlbumComment(AlbumComment $albumComment): self
+    {
+        if (!$this->albumComments->contains($albumComment)) {
+            $this->albumComments[] = $albumComment;
+            $albumComment->setUserid($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAlbumComment(AlbumComment $albumComment): self
+    {
+        if ($this->albumComments->contains($albumComment)) {
+            $this->albumComments->removeElement($albumComment);
+            // set the owning side to null (unless already changed)
+            if ($albumComment->getUserid() === $this) {
+                $albumComment->setUserid(null);
+            }
+        }
 
         return $this;
     }

@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -34,6 +34,7 @@ class Article
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
+     * @Assert\File(mimeTypes={"image/png","image/jpeg"})
      */
     private $thumb;
 
@@ -63,7 +64,14 @@ class Article
      * @ORM\Column(type="text", nullable=true)
      */
     private $content;
-
+    /**
+     * 这儿是上传编辑使用的 结合 App\Form\Extension\FileUploaderTypeExtension（包含服务）使用
+     * 有个问题是编辑后图片路径会被清空，处理方式进控制编辑操作里
+     */    
+    public function getWebPath()
+    {
+        return $this->thumb;
+    }
     /**
      * @ORM\PrePersist()
      */

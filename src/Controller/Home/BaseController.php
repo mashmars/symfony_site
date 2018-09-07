@@ -19,6 +19,7 @@ class BaseController extends Controller
     protected $userinfo = []; //个人相关信息
 
     protected $article_category ; //文章分类
+     
    
     public function __construct(Security $security,SessionInterface $session)
     {       
