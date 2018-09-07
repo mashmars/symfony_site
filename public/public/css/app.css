@@ -78,3 +78,6 @@
   }
  /**首页个人资料end**/ 
   
+ /**咨询分类**/
+ .article_category li.active{background-color: #2ba6cb;  color: #fff; padding:0 5px;}
+ /**咨询分类**/
