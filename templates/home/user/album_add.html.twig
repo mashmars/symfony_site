@@ -1,0 +1,197 @@
+{% extends 'home/common_user.html.twig' %}
+{% block title %}专辑列表{% endblock %}
+{% block css %}
+{{ parent() }}
+<link rel="stylesheet" href="/lib/dropzone/dropzone.css">
+<link rel="stylesheet" href="/lib/dropzone/basic.css">
+<style>
+    #myDropzone{        
+        border: 3px dashed rgb(115, 197, 230);
+        border-radius: 2%;
+        box-shadow: 3px 3px 5px #888888;
+    }
+</style>
+{% endblock %}
+{% block breadcrubm %}
+          <div class="grid-x">
+              <nav aria-label="You are here:" role="navigation">
+                  <ul class="breadcrumbs">
+                    <li><a href="{{ path('home') }}">首页</a></li>
+                    <li><a href="{{ path('user_album_index') }}">图集列表</a></li>                    
+                    <li>
+                      <span class="show-for-sr">Current: </span> 图集增加
+                    </li>
+                  </ul>
+              </nav>  
+          </div>
+{% endblock %}
+{% block right %}
+            <div class="cell large-8 medium-7 margin-top-2 padding-1 shadow">                
+                <div class="grid-x">
+                  <div class="cell">
+                    <div class="callout">
+                        <div class="dropzone" id="myDropzone"></div>
+                    </div>
+                  </div>
+                </div>
+               <div class="grid-x">
+                 <div class="cell">
+                   <form id="album_form">
+                     <div class="grid-x">
+                      <div class="cell">
+                        <label>分类
+                        <select id="category">
+                          <option value="">---请选择---</option>
+                          {% for category in categorys %}
+                          <option value="{{ category.id }}">{{ category.name }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                     </div>
+                     <div class="grid-x">
+                      <div class="cell">
+                        <label>标题
+                        <input type="text" name="title" id="title" />
+                        </label>
+                        <p class="help-text alert">标题不能为空</p>
+                      </div>
+                     </div>
+                     <div class="grid-x">
+                       <div class="cell">
+                         <label>描述
+                           <textarea id="descript" rows=5></textarea>
+                         </label>                         
+                       </div>
+                     </div>
+                     <div class="grid-x">
+                       <div class="cell">
+                         <fieldset>
+                         <input type="hidden" name="csrf_token" id="csrf_token" value="{{ csrf_token('album-upload') }}" />
+                           <button type="button" class="button" id="save">提交</button>
+                         </fieldset>
+                       </div>
+                     </div>
+                   </form>
+                 </div>
+               </div>
+            </div>
+{% endblock %}
+{% block script %}
+{{ parent() }}
+<script src="/lib/dropzone/dropzone.js"></script>
+<script>   
+    Dropzone.autoDiscover = false;
+    var myDropzone = new Dropzone("#myDropzone", {        
+          //指定处理上传图片的路径
+          url: "{{ path('user_album_upload') }}",
+          paramName: "file",
+          //最大文件大小，单位是 MB
+          maxFilesize: 10,
+          //默认false。如果设为true，则会给文件添加上传取消和删除预览图片的链接
+          addRemoveLinks: true,
+          //指明允许上传的文件类型，格式是逗号分隔的 MIME type 或者扩展名。例如：image/*,application/pdf,.psd,.obj
+          acceptedFiles: "image/*",
+          //指明是否允许 Dropzone 一次提交多个文件。默认为false。如果设为true，则相当于 HTML 表单添加multiple属性。
+          uploadMultiple: true,
+          //关闭自动上传功能，默认会true会自动上传
+          //也就是添加一张图片向服务器发送一次请求
+          autoProcessQueue: true,
+          //每次上传的最多文件数，经测试默认为2，
+          //记得修改web.config 限制上传文件大小的节
+          parallelUploads: 100,
+          dictDefaultMessage: "拖拽图片或者点击",
+          dictFileTooBig: "图片最大10M",
+          dictInvalidFileType: "只能上传图片",
+          dictRemoveFile: "移除",
+          //一个函数，在 Dropzone 初始化的时候调用，可以用来添加自己的事件监听器。
+          init: function () {
+              var msg = "支持jpg、jpeg、png、gif格式，大小不超过5M.";
+              var spanMsg = $("#spanMsg");
+      
+              var btUploadAll = $("#btUploadAll");
+              var submitButton = document.querySelector("#btUploadAll")
+              myDropzone = this; // closure
+              
+      
+              //当添加图片后的事件，上传按钮恢复可用
+              this.on("addedfile", function () {
+                  btUploadAll.removeAttr("disabled");
+                  spanMsg.text(msg);
+              });
+      
+              //当上传完成后的事件，接受的数据为JSON格式
+              this.on("complete", function (data) {                
+                  if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {                     
+                      var res = data.xhr;                      
+                      if(res.status ==200){
+                        var img = res.response.replace('"','');
+                        var input = '<input type="hidden" name="images" id="images" value="'+img+'" />';
+                        $('#album_form').append(input);
+                      }
+                  }
+              });
+               
+      
+              //删除图片的事件，当上传的图片为空时，使上传按钮不可用状态
+              this.on("removedfile", function (data) {                 
+                  if (this.getAcceptedFiles().length === 0) {
+                      btUploadAll.attr("disabled", true);                      
+                      spanMsg.text(msg);
+                  }
+                  var filename = data.name;
+                  $.post("{{ path('user_album_upload_delete') }}",{filename:filename},function(data){
+                      //需要取出#images的值 ，去掉；如果都移除了，则#images值应该为空
+                      if(data.code == 0){
+                        layer.msg(data.msg,{time:2000,icon:1});
+                        var del = data.data; //删除的图片名称
+                        var images = $("#images").val();
+                        images = images.split(','); //字符串转数组
+                        $.each(images,function(k,v){
+                          if(v == del){
+                            images.splice(k,1);//删除指定下标的数组
+                          }
+                        })
+                        images = images.join(',');//数组转字符串
+                        $("#images").val(images);
+                      }
+                  },'json')
+              });
+          }
+      });
+      //表单上传
+      $('#save').click(function(){
+        var obj = $(this);
+        obj.prop('disable',true);
+        var category = $("#category").val();
+        var title = $("#title").val();
+        var descript = $("#descript").val();
+        var csrf_token = $("#csrf_token").val();
+        var images = $("#images").val(); 
+        if(category==''){
+          layer.msg('分类不能为空',{time:2000,icon:5});
+          obj.prop('disable',false);
+          return false;
+        }
+        if(title==''){
+          layer.msg('标题不能为空',{time:2000,icon:5});
+          obj.prop('disable',false);
+          return false;
+        }
+        if(images=='' || typeof(images) == 'undefined'){
+          layer.msg('请上传图片',{time:2000,icon:5});
+          obj.prop('disable',false);
+          return false;
+        }
+        console.log(images);
+        $.post("{{ path('user_album_upload_save') }}",{category:category,title:title,descript:descript,csrf_token:csrf_token,images:images},function(data){
+          if(data.code == 0){
+            layer.msg(data.msg,{time:2000,icon:1});
+            location.reload();
+          }else{
+            layer.msg(data.msg,{time:2000,icon:5});
+            obj.prop('disable',false);
+          }
+        },'json')
+      })
+</script>
+{% endblock %}

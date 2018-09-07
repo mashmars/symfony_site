@@ -11,13 +11,10 @@
                   </ul>
               </nav>  
           </div>
-          {% endblock %}
-                  
-            {% block right %}
-            <div class="cell large-8 medium-7 margin-top-2 padding-1 shadow">                
-               <a class="button small hollow"><i class="fi-plus"></i> 头像</a>
-               <hr>
-              {% for type,messages in app.flashes %}
+{% endblock %}
+          {% block right %}
+            <div class="cell large-8 medium-7 margin-top-2 padding-1 shadow">
+                {% for type,messages in app.flashes %}
               <div class="cell">
                   <div class="{{ type }} callout" data-closable="slide-out-right">
                     {% for message in messages %}
@@ -29,10 +26,9 @@
                   </div>
                 </div>
                 {% endfor %}
-                {% form_theme form 'home/field.html.twig' %}
-               {{ form_start(form,{'attr':{'novalidate':'novalidate'}}) }}
-               {{ form_widget(form) }}
-               {{ form_end(form) }}
+                {{ form_start(form,{'novalidate':'novalidate'}) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
             </div>
-            {% endblock %}
-         
+          {% endblock %}
+          

@@ -1,0 +1,61 @@
+{% extends 'home/common.html.twig' %}
+{% block breadcrumb %}
+          <div class="grid-x">
+              <nav aria-label="You are here:" role="navigation">
+                  <ul class="breadcrumbs">
+                    <li><a href="{{ path('home') }}">首页</a></li>
+                    <li><a href="{{ path('album_index') }}">图集列表</a></li>                    
+                    <li>
+                      <span class="show-for-sr">Current: </span> 图集
+                    </li>
+                  </ul>
+              </nav>  
+          </div>
+          {% endblock %}
+  
+      {% block main %}
+          <div class="grid-x">            
+            <div class="cell large-3 medium-4 margin-top-3  padding-right-1">
+                <ul class="vertical menu accordion-menu shadow padding-top-1 padding-bottom-1 article_category" data-accordion-menu>
+                    {# <li>
+                      <a href="#">分类一</a>
+                      <ul class="menu vertical nested">
+                        <li><a href="#">分类二</a></li>
+                        <li><a href="#">分类三</a></li>
+                      </ul>
+                    </li> #}
+                    <li><a href="{{ path('album_index') }}">全部图集</a></li>
+                    {% for category in album_category %}
+                    <li {% if category.id == app.request.get('id') %} class="active" {% endif %}><a href="{{ path('album_index',{'name':category.name}) }}">{{ category.name }}</a></li>
+                    {% endfor %}
+                  </ul>   
+            </div>
+            <div class="cell large-9 medium-8 margin-top-2 padding-1 shadow">
+                
+                <hr>               
+                <div class="grid-x large-up-4 medium-up-3">
+                  {% for album in pagination %}
+                  <div class="card margin-right-1 ">
+                    <div class="card-section">
+                    <a href="{{ path('album_image_show',{'id':album.id}) }}">
+                    {% if album.thumb %}
+                    <img src="/uploads/{{ album.thumb }}" width='200'>
+                    {% else %}
+                      <img src="/public/images/3.jpg">
+                    {% endif %}
+                    </a>
+                    </div>
+                    <div class="card-section">
+                      <p><a href="{{ path('album_image_show',{'id':album.id}) }}">{{ album.title }}</a></p>
+                      <label class="label">{{ album.getCollectCount() }} 收藏</label>
+                      <label class="label">{{ album.views() }} 点击</label>
+                      <label class="label">{{ album.getCommentCount() }} 评论</label>                      
+                    </div>
+                  </div>
+                  {% endfor %}
+                  
+                </div>
+              {{ knp_pagination_render(pagination) }}
+            </div>
+          </div>   
+ {% endblock %}    

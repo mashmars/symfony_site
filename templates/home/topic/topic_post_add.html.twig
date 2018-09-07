@@ -1,0 +1,57 @@
+{% extends 'home/common.html.twig' %}
+{% block title %}话题讨论-话题新建{% endblock %}
+{% block banner %}
+    <div class="grid-x">
+        <div class="cell">
+            <div class="callout large primary">
+                <div class="text-center">
+                  <h1>话题讨论</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block breadcrumb %}
+<div class="grid-x">
+    <nav aria-label="You are here:" role="navigation">
+        <ul class="breadcrumbs">
+        <li><a href="{{ path('home') }}">首页</a></li>
+        <li><a href="{{ path('topic_index') }}">话题讨论</a></li>                    
+        <li>
+            <span class="show-for-sr">Current: </span> 创建话题
+        </li>
+        </ul>
+    </nav>  
+</div>
+{% endblock %} 
+    {% block main %}
+        {{ form_start(form,{'novalidate':'novalidate'}) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+    {% endblock %}
+      
+  {% block right %}       
+        <div class="callout shadow">
+          <h6>话题分类</h6>
+          {% for category in categorys %}
+          <a class="label" href="{{ path('topic_index',{ 'name':category.name}) }}">{{ category.name }}</a>
+          {% endfor %}
+        </div>
+        
+        <div class="callout shadow">
+          <h6>热门话题</h6>
+          <ul class="list-disc">
+            {% for topic in topic_hot %}
+            <li><a href="{{ path('topic_detail',{'id':topic.id }) }}">{{ topic.title }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+        <div class="callout shadow">
+          <h6>喜欢的人</h6>
+          <ul class="list-disc">
+              <li><a>这是标题</a></li>
+              <li><a>这是标题</a></li>
+              <li><a>这是标题</a></li>
+            </ul>
+        </div>
+      {% endblock %}

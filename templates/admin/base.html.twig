@@ -46,22 +46,24 @@
         <li>
           <a href="#">网站文章</a>
           <ul class="menu vertical nested">
-            <li><a href="{{ path('category_index') }}">分类管理</a></li>
-            <li><a href="{{ path('article_index') }}">文章管理</a></li>           
+            <li><a href="{{ path('admin_category_index') }}">分类管理</a></li>
+            <li><a href="{{ path('admin_article_index') }}">文章管理</a></li>           
           </ul>
-        </li>
-        <li><a href="#">个人中心</a>
-          <ul class="menu vartical nested">
-            <li><a>基本信息</a></li>
-            <li><a>我的好友</a></li>
-            <li><a>我的粉丝</a></li>
-            
+        </li>       
+        <li>
+          <a href="#">话题设置</a>
+          <ul class="menu vertical nested">
+            <li><a href="{{ path('admin_topic_category_index') }}">分类管理</a></li>
+            <li><a href="#">话题管理</a></li>           
           </ul>
-        </li>
-        <li><a>我的发布</a>
-          
-        </li>
-        <li><a>我的话题</a></li>
+        </li>   
+        <li>
+          <a href="#">图片专辑管理</a>
+          <ul class="menu vertical nested">
+            <li><a href="{{ path('admin_album_category_index') }}">分类管理</a></li>
+            <li><a href="#">专辑管理</a></li>           
+          </ul>
+        </li>     
       </ul> 
     </div>
     <div class="cell large-10 medium-10 padding-left-1 margin-top-1">

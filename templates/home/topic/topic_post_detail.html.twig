@@ -1,22 +1,35 @@
 {% extends 'home/common.html.twig' %}
-{% block title %}{{ post.title }}{% endblock %}
+{% block title %}{{ topic.title }}{% endblock %}
 {% block banner %}
     <div class="grid-x">
         <div class="cell">
             <div class="callout large primary">
                 <div class="text-center">
-                  <img  src="/public/images/3.jpg" />
+                  <h1>话题讨论</h1>
                 </div>
             </div>
         </div>
     </div>
   {% endblock %}
+  {% block breadcrumb %}
+          <div class="grid-x">
+              <nav aria-label="You are here:" role="navigation">
+                  <ul class="breadcrumbs">
+                    <li><a href="{{ path('home') }}">首页</a></li>
+                    <li><a href="{{ path('topic_index') }}">话题讨论</a></li>                    
+                    <li>
+                      <span class="show-for-sr">Current: </span> 话题明细
+                    </li>
+                  </ul>
+              </nav>  
+          </div>
+          {% endblock %}
    {% block main %}
         <div class="grid-x">
           <div class="cell">
-              <h4 class="text-center">{{ post.title }}</h4>
+              <h4 class="text-center">{{ topic.title }}</h4>
               <div class="content">
-                {{ post.content|raw }}
+                {{ topic.content }}
               </div>
           </div>
         </div>
@@ -42,9 +55,9 @@
                           <label>
                               请留下您的评论
                               <textarea placeholder="回复..." rows="3" cols="100" id="content"></textarea>
-                              <input type="hidden" name='csrf_token' value="{{ csrf_token('comment') }}" id="csrf_token" />
+                              <input type="hidden" name='csrf_token' value="{{ csrf_token('topic') }}" id="csrf_token" />
                           </label>
-                          <p class="help-text">登陆后方可回复</p>
+                          <p class="help-text">登陆后方可评论</p>
                       </div>
                   </div>
                   <div class="grid-x grid-margin-x margin-right-3 float-right">
@@ -65,14 +78,18 @@
                   <div class="media-object-section">
                     <img class="thumbnail" src="{{ comment.userid.headimg }}">
                   </div>
-                  <div class="media-object-section"> 
+                  <div class="media-object-section" style="width:90%"> 
                     <h6>{{ comment.userid.nickname }}
                       <small class="margin-left-3">{{ comment.getCreatedAt()|date('Y-m-d H:i:s')|trans_datetime }}</small>
                       {% if app.user %}
-                      {% if app.user.getId() == post.userid.getId()%}
-                      <button class="button tiny alert float-right margin-left-3 comment-delete" data-id="{{ comment.id }}">删除</button>
+                      {% if app.user.getId() == topic.userid.getId()%}
+                      <button class="button tiny alert  margin-left-3 comment-delete" data-id="{{ comment.id }}">删除</button>
                       {% endif %}
                       {% endif %}
+                      <div class="float-right margin-right-3">
+                        <button class="like margin-right-1 button small success" data-id="{{ comment.id }}"><i class="fi-like"></i> <span>{{ comment.getLikeCount() }}</span></button>
+                        <button class="dislike button small alert" data-id="{{ comment.id }}"><i class="fi-dislike"></i><span> {{ comment.getUnlinkCount() }}</span></button>
+                      </div>
                     </h6>
                     <p>{{ comment.content }}</p>
                   </div>
@@ -87,29 +104,24 @@
         </div>
       {% endblock %}    
      {% block right %}
-        <div class="callout shadow">
-          <h6 >博客分类</h6>
-          <ul class="no-bullet">
-            {% for category in categorys %}
-            <li><a href="{{ path('blog_category',{ 'name':category.name,'id':category.id }) }}">{{ category.name }}</a></li>
-            {% endfor %}
-          </ul>
+        <div class="callout">
+            <a class="button success hollow small" href="{{ path('topic_create') }}">创建话题</a>
         </div>
-
         <div class="callout shadow">
-          <h6>博客标签</h6>
-          {% for tag in tags %}
-          <a class="label" href="{{ path('blog_tag',{ 'name':tag.name,'id':tag.id }) }}">{{ tag.name }}</a>
+          <h6>话题分类</h6>
+          {% for category in categorys %}
+          <a class="label" href="{{ path('topic_index',{ 'name':category.name}) }}">{{ category.name }}</a>
           {% endfor %}
         </div>
+        
         <div class="callout shadow">
-          <h6>热门博客文章</h6>
+          <h6>热门话题</h6>
           <ul class="list-disc">
-            {% for post in post_hot %}
-            <li><a href="{{ path('blog_detail',{'title':post.title,'id':post.id }) }}">{{ post.title }}</a></li>
+            {% for topic in topic_hot %}
+            <li><a href="{{ path('topic_detail',{'id':topic.id }) }}">{{ topic.title }}</a></li>
             {% endfor %}
             </ul>
-        </div>    
+        </div>
         <div class="callout shadow">
           <h6>喜欢的人</h6>
           <ul class="list-disc">
@@ -134,7 +146,7 @@
           $(this).prop('disabled',false);
           return false;
         }
-        $.post("{{ path('blog_comment') }}",{content:content,csrf_token:csrf_token,post_id:"{{ post.id }}"},function(data){
+        $.post("{{ path('topic_comment') }}",{content:content,csrf_token:csrf_token,topic_id:"{{ topic.id }}"},function(data){
             if(data.code == 0){
               layer.msg(data.msg,{time:2000,icon:1});
               location.reload();
@@ -154,7 +166,7 @@
         $(this).prop('disabled',true);
         var obj = $(this);
         var id = $(this).attr('data-id');
-        $.post("{{ path('blog_comment_delete') }}",{id:id},function(data){
+        $.post("{{ path('topic_comment_delete') }}",{id:id},function(data){
           if(data.code == 0){
             layer.msg(data.msg,{time:2000,icon:1},function(){
               obj.parents('.media-object').remove();
@@ -165,6 +177,44 @@
           }
         },'json')
       })
+
+       //点赞
+      $('.like').click(function(){
+        $(this).prop('disabled',true);
+        var obj = $(this);
+        var id = $(this).attr('data-id');
+        var num = parseInt($(this).find('span').text());
+        $.post("{{ path('topic_comment_like') }}",{id:id},function(data){
+          if(data.code == 0){
+            layer.msg(data.msg,{time:2000,icon:1},function(){
+              obj.find('span').text(num+1);
+            });
+          }else{
+            obj.prop('disabled',false);
+            layer.msg(data.msg,{time:2000,icon:5});
+          }
+        },'json')
+      })
+
+       //嘲讽
+      $('.dislike').click(function(){
+        $(this).prop('disabled',true);
+        var obj = $(this);
+        var id = $(this).attr('data-id');
+        var num = parseInt($(this).find('span').text());
+        $.post("{{ path('topic_comment_dislike') }}",{id:id},function(data){
+          if(data.code == 0){
+            layer.msg(data.msg,{time:2000,icon:1},function(){
+              obj.find('span').text(num+1);
+            });
+          }else{
+            obj.prop('disabled',false);
+            layer.msg(data.msg,{time:2000,icon:5});
+          }
+        },'json')
+      })
+
+
     })
     </script>
     {% endblock %}

@@ -25,4 +25,14 @@
     {%- endfor -%}    
     {%- endif -%}
 {%- endblock form_widget_simple -%}
+{#上传编辑的展示#}
+{% block file_widget %}
+    {% spaceless %}
 
+    {{ block('form_widget') }}
+    {% if image_url is not null %}
+        <img src="{{ image_url }}" width="25%"/>
+    {% endif %}
+
+    {% endspaceless %}
+{% endblock %}

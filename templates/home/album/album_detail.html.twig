@@ -1,0 +1,121 @@
+{% extends 'home/common.html.twig' %}
+{% block breadcrumb %}
+          <div class="grid-x">
+              <nav aria-label="You are here:" role="navigation">
+                  <ul class="breadcrumbs">
+                    <li><a href="{{ path('home') }}">首页</a></li>
+                    <li><a href="{{ path('album_index') }}">图集列表</a></li>                    
+                    <li>
+                      <span class="show-for-sr">Current: </span> 图集明细
+                    </li>
+                  </ul>
+              </nav>  
+          </div>
+          {% endblock %}
+{% block main %}
+          <div class="grid-x">            
+            <div class="cell large-4 medium-5 margin-top-3  padding-right-1">
+                <div class="media-object border-box shadow padding-1">
+                    <div class="media-object-section">
+                      <img class="thumbnail" src="https://placehold.it/100x100">
+                    </div>
+                    <div class="media-object-section">
+                      <p><a class="label"><i class="fi-torso"></i> {{ album.userid.getNickname() }}</a></p>
+                      <p><a class="label alert small follow" data-userid="{{ album.userid.getId() }}"><i class="fi-plus"></i> 关&nbsp;&nbsp;&nbsp;注&nbsp;&nbsp;&nbsp;&nbsp;</a></p>
+                      <p><a class="label success small" href="{{ path('blog_index',{'subdomain':album.userid.domain|default('mash')}) }}"><i class="fi-page-doc"></i> 作者博客</a></p>
+                    </div>
+                </div>
+                <p>他的专辑</p>
+                <div class="grid-x large-up-3 medium-up-3 small-up-3">                  
+                    <a class="button small hollow success" href="{{ path('album_index',{'userid':album.userid.getId()}) }}">查看更多</a>
+                </div>
+                
+               
+            </div>
+            <div class="cell large-8 medium-7">
+                <div class="grid-x">
+                    <p class="lead text-center">{{ album.title }}</p>   
+                    <div class="content text-center">
+                      {% for image in album.images %}
+                      <p><img src="/uploads/{{ image }}"></p>
+                      {% endfor %}
+                      <p>
+                        <!--<a class="button primary collect" data-id="{{ album.id }}"><i class="fi-heart"> {{ album.getCollectCount() }}</i> 收藏</a>-->
+                        <a class="button success margin-right-3" data-id="{{ album.id }}"><i class="fi-eye"> {{ album.views }}</i> 浏览</a>
+                        <a class="button warning" data-id="{{ album.id }}"><i class="fi-comments"> {{ album.getCommentCount() }}</i> 评论</a>
+                      </p>
+                    </div> 
+                </div>
+                <div class="grid-x">
+                  <p>评论</p>
+                  <form>
+                      <div class="grid-x grid-padding-x">
+                          <div class="cell">
+                              <label>
+                                  请填写评论内容
+                                  <textarea placeholder="内容" rows="3" cols="100" id='content'></textarea>
+                              </label>
+                              <p class="help-text">登录后方可评论</p>
+                          </div>
+                      </div>
+                      <div class="grid-x grid-margin-x margin-right-3 float-right">
+                          <fieldset class="cell">
+                            <input type="hidden" id='csrf_token' value="{{ csrf_token('album-comment') }}">
+                            <button class="button small " type="button" id="submit">提交</button>
+                          </fieldset>                          
+                        </div>
+                  </form>
+                </div>
+                <p>评论</p>
+                <div class="grid-x">
+                  <div class="cell">
+                     {% for comment in pagination %}
+                     <div class="media-object">
+                          <div class="media-object-section">
+                            <img class="thumbnail" src="{{ comment.userid.headimg }}">
+                          </div>
+                          <div class="media-object-section">                            
+                            <p>{{ comment.content }}</p>
+                          </div>
+                      </div>
+                      {% endfor %}
+                  </div>
+                </div>
+                {{ knp_pagination_render(pagination) }}
+            </div>
+          </div>   
+                 
+      {% endblock %}
+      {% block script %}
+      {{ parent() }}
+      <script>
+        $(function(){
+          $('#submit').click(function(){
+            var obj = $(this);
+            $(this).prop('disabled',true);
+            var content = $('#content').val();
+            var csrf_token = $('#csrf_token').val();
+            if(content == '')
+            {
+              layer.msg('评论内容不能为空',{time:2000,icon:2});
+              $(this).prop('disabled',false);
+              return false;
+            }
+            $.post("{{ path('album_comment') }}",{content:content,csrf_token:csrf_token,album_id:"{{ album.id }}"},function(data){
+                if(data.code == 0){
+                  layer.msg(data.msg,{time:2000,icon:1});
+                  location.reload();
+                }else if(data.code == -1){
+                  layer.msg(data.msg,{time:2000,icon:5},function(){
+                    var url ='/login?_target_path={{ app.request.getRequestUri() }}';
+                    location.href = url ;
+                  })
+                }else{
+                  layer.msg(data.msg,{time:2000,icon:5});
+                  obj.prop('disabled',false);
+                }
+            },'json')
+          })
+        })
+      </script>
+      {% endblock %}

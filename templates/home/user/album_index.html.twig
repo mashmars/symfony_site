@@ -1,0 +1,44 @@
+{% extends 'home/common_user.html.twig' %}
+{% block breadcrubm %}
+          <div class="grid-x">
+              <nav aria-label="You are here:" role="navigation">
+                  <ul class="breadcrumbs">
+                    <li><a href="{{ path('home') }}">首页</a></li>
+                    <li><a href="{{ path('user_album_index') }}">图集列表</a></li>                    
+                    <li>
+                      <span class="show-for-sr">Current: </span> 图集增加
+                    </li>
+                  </ul>
+              </nav>  
+          </div>
+{% endblock %}
+          {% block right %}
+            <div class="cell large-8 medium-7 margin-top-2 padding-1 shadow">
+                <a class="button small hollow" href="{{ path('user_album_image_add') }}"><i class="fi-plus"></i> 新增</a>
+                <hr>               
+                <div class="grid-x large-up-4 medium-up-3">
+                  {% for album in pagination %}
+                  <div class="card margin-right-1 ">
+                    <div class="card-section">
+                    <a href="{{ path('user_album_image_show',{'id':album.id}) }}">
+                    {% if album.thumb %}
+                    <img src="/uploads/{{ album.thumb }}" width='200'>
+                    {% else %}
+                      <img src="/public/images/3.jpg">
+                    {% endif %}
+                    </a>
+                    </div>
+                    <div class="card-section">
+                      <p><a href="{{ path('user_album_image_show',{'id':album.id}) }}">{{ album.title }}</a></p>
+                      <label class="label">{{ album.getCollectCount() }} 收藏</label>
+                      <label class="label">{{ album.views() }} 点击</label>
+                      <label class="label">{{ album.getCommentCount() }} 评论</label>                      
+                    </div>
+                  </div>
+                  {% endfor %}
+                  
+                </div>
+              {{ knp_pagination_render(pagination) }}
+            </div>
+          {% endblock %}
+          

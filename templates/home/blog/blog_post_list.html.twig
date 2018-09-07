@@ -3,9 +3,9 @@
 {% block banner %}
     <div class="grid-x">
         <div class="cell">
-            <div class="callout large primary">
-                <div class="text-center">
-                  <h1>Our Blog</h1>
+            <div class=" large primary">
+                <div class="text-center">                 
+                  <img  src="/public/images/3.jpg" />
                 </div>
             </div>
         </div>
@@ -17,7 +17,7 @@
             <div class="grid-x shadow padding-1 margin-top-1">
                 <div class="cell large-2">
                 <p>
-                    <a href="{{ path('blog_detail',{'title':article.title,'id':article.id }) }}"><img src= "https://placeimg.com/150/150/people"></a>
+                    <a href="{{ path('blog_detail',{'title':article.title,'id':article.id }) }}"><img src= "{{ article.thumb }}" width='150'></a>
                 </p>
                 </div>
                 <div class="cell large-10">

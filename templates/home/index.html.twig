@@ -12,15 +12,21 @@
                       <li class="is-active orbit-slide">
                         <figure class="orbit-figure">
                           <img class="orbit-image" src="/public/images/1.jpg" alt="Space">
-                          <figcaption class="orbit-caption">Space, the final frontier.</figcaption>
+                          <figcaption class="orbit-caption">Yes</figcaption>
                         </figure>
                       </li>
                       <li class="orbit-slide">
                         <figure class="orbit-figure">
                           <img class="orbit-image" src="/public/images/2.jpg" alt="Space">
-                          <figcaption class="orbit-caption">Lets Rocket!</figcaption>
+                          <figcaption class="orbit-caption">Lets</figcaption>
                         </figure>
-                      </li>                  
+                      </li>  
+                      <li class="orbit-slide">
+                        <figure class="orbit-figure">
+                          <img class="orbit-image" src="/public/images/3.jpg" alt="Space">
+                          <figcaption class="orbit-caption">Go</figcaption>
+                        </figure>
+                      </li>                   
                     </ul>
                   </div>
                   <!-- <nav class="orbit-bullets">
@@ -30,269 +36,93 @@
                 </div>
           </div>
           <div class="cell margin-top-1">
-              <ul class="tabs" data-tabs id="example-tabs">
-                  <li class="tabs-title is-active"><a href="#panel1" aria-selected="true">Tab 1</a></li>
-                  <li class="tabs-title"><a data-tabs-target="panel2" href="#panel2">Tab 2</a></li>
+              <ul class="tabs" data-tabs id="example-tabs">                  
+                  {% for category in album_category %} 
+                  <li {% if loop.index == 1%}class="tabs-title is-active"{% else %}class="tabs-title"{% endif %}><a href="#panel{{ loop.index }}" aria-selected="true">{{ category.name }}</a></li>                  
+                  {% endfor %}
               </ul>
               <div class="tabs-content" data-tabs-content="example-tabs">
-                <div class="tabs-panel is-active" id="panel1">
-                  <div class="grid-x largin-up-4 medium-3 ">
+                {% for category in album_category %}
+                <div {% if loop.index == 1%}class="tabs-panel is-active"{% else %}class="tabs-panel"{% endif %} id="panel{{ loop.index }}">
+                  <div class="grid-x large-up-4 medium-3 ">
+                    {% for album in category.album %}
                     <div class="card margin-right-1 ">
                       <div class="card-section">
-                        <img src="/public/images/3.jpg">
+                        <img src="/uploads/{{ album.thumb }}">
                       </div>
                       <div class="card-section">
-                        <p>阿萨德是是</p>
-                        <label class="label">1 收藏</label>
-                        <label class="label">1 点击</label>
-                        <label class="label">1 评论</label>
+                        <p>{{ album.title }}</p>
+                        <label class="label">{{ album.getCollectCount() }} 收藏</label>
+                        <label class="label">{{ album.getViews() }} 点击</label>
+                        <label class="label">{{ album.getCommentCount() }} 评论</label>
                        
                         <div class="media-object  margin-top-1">
                           <div class="media-object-section">
                             <div class="thumbnail">
-                              <img src= "/public/images/no_header.jpg">
+                              <img src= "{{ album.userid.headimg }}">
                             </div>
                           </div>
                           <div class="media-object-section main-section">
-                            昵称 发表于 xxxxx 
+                            {{ album.userid.nickname }} 发表于 {{ album.getCreatedAt()|date('Y-m-d H:i:s')|trans_datetime }} 
                           </div>
                         </div>
+                      </div>
                       </div>
                     </div>
-                    <div class="card margin-right-1 ">
-                      <div class="card-section">
-                        <img src="/public/images/3.jpg">
-                      </div>
-                      <div class="card-section">
-                        <p>阿萨德是是</p>
-                        <label class="label">1 收藏</label>
-                        <label class="label">1 点击</label>
-                        <label class="label">1 评论</label>
-                       
-                        <div class="media-object  margin-top-1">
-                          <div class="media-object-section">
-                            <div class="thumbnail">
-                              <img src= "/public/images/no_header.jpg">
-                            </div>
-                          </div>
-                          <div class="media-object-section main-section">
-                            昵称 发表于 xxxxx 
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card margin-right-1 ">
-                      <div class="card-section">
-                        <img src="/public/images/3.jpg">
-                      </div>
-                      <div class="card-section">
-                        <p>阿萨德是是</p>
-                        <label class="label">1 收藏</label>
-                        <label class="label">1 点击</label>
-                        <label class="label">1 评论</label>
-                       
-                        <div class="media-object  margin-top-1">
-                          <div class="media-object-section">
-                            <div class="thumbnail">
-                              <img src= "/public/images/no_header.jpg">
-                            </div>
-                          </div>
-                          <div class="media-object-section main-section">
-                            昵称 发表于 xxxxx 
-                          </div>
-                        </div>
-                      </div>
-                    </div>  
-                    <div class="card margin-right-1 ">
-                        <div class="card-section">
-                          <img src="/public/images/3.jpg">
-                        </div>
-                        <div class="card-section">
-                          <p>阿萨德是是</p>
-                          <label class="label">1 收藏</label>
-                          <label class="label">1 点击</label>
-                          <label class="label">1 评论</label>
-                         
-                          <div class="media-object  margin-top-1">
-                            <div class="media-object-section">
-                              <div class="thumbnail">
-                                <img src= "/public/images/no_header.jpg">
-                              </div>
-                            </div>
-                            <div class="media-object-section main-section">
-                              昵称 发表于 xxxxx 
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card margin-right-1 ">
-                        <div class="card-section">
-                          <img src="/public/images/3.jpg">
-                        </div>
-                        <div class="card-section">
-                          <p>阿萨德是是</p>
-                          <label class="label">1 收藏</label>
-                          <label class="label">1 点击</label>
-                          <label class="label">1 评论</label>
-                         
-                          <div class="media-object  margin-top-1">
-                            <div class="media-object-section">
-                              <div class="thumbnail">
-                                <img src= "/public/images/no_header.jpg">
-                              </div>
-                            </div>
-                            <div class="media-object-section main-section">
-                              昵称 发表于 xxxxx 
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                     
-                  </div>
-                </div>
-                <div class="tabs-panel" id="panel2">
-                  <p>2</p>
-                </div>
-              </div>
+                   {% endfor %}
+                </div>               
+                {% endfor %}
           </div>
-
+</div>
           <div class="cell margin-top-1">
             最新blog
+            {% for post in blog %}
             <div class="grid-x shadow padding-1 margin-top-1">
                 <div class="cell large-2">
                   <p>
-                      <img src= "https://placeimg.com/150/150/people">
+                      <a href="{{ path('blog_detail',{'id':post.id,'title':post.title,'subdomain':post.userid.domain|default('mash')}) }}" title="{{ post.title}}"><img src= "{{ post.thumb }}"></a>
                   </p>
                 </div>
                 <div class="cell large-10">
-                    <h4>Dreams feel real while we're in them.</h4>
+                    <h4><a href="{{ path('blog_detail',{'id':post.id,'title':post.title,'subdomain':post.userid.domain|default('mash')}) }}" title="{{ post.title }}">{{ post.title }}</h4>
                     <p class="subheader">
-                        <a class="margin-right-1"><span><i class="fi-torso"> 作者</i>  </span></a>
-                        <a class="margin-right-1"><span><i class="fi-checkbox"> 分类</i> </span></a>
-                        <a class="margin-right-1"><span><i class="fi-calendar"> 2018-08-20</i></span></a>
-                        <a class="margin-right-1"><span><i class="fi-eye"> 6 阅读</i></span> </a>
-                        <a class="margin-right-1"><span><i class="fi-comments"> 6 评论</i></span></a>
+                        <a class="margin-right-1"><span><i class="fi-torso"> {{ post.userid.nickname }}</i>  </span></a>
+                        <a class="margin-right-1" href="{{ path('blog_category',{'id':post.category.id,'name':post.category.name,'subdomain':post.userid.domain|default('mash')}) }}"><span><i class="fi-checkbox"> {{ post.category.name }}</i> </span></a>
+                        <a class="margin-right-1"><span><i class="fi-calendar"> {{ post.getCreatedAt()|date('Y-m-d H:i:s')}}</i></span></a>
+                        <a class="margin-right-1"><span><i class="fi-eye"> {{ post.views }} 阅读</i></span> </a>
+                        <a class="margin-right-1"><span><i class="fi-comments"> {{ post.comments|count }} 评论</i></span></a>
                     </p>
-                  <p>I'm going to improvise. Listen, there's something you should know about me... about inception. An idea is like a virus, resilient, highly contagious. The smallest seed of an idea can grow. It can grow to define or destroy you.</p>
+                  <p>{{ post.descript }}</p>
                   <p class="float-right">
-                      <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签</a>
-                      <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签2</a>
-                      <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签3</a>
-                      <a class="margin-left-2">查看详情</a>
+                      {% for tag in post.tags %}
+                      <a class="margin-right-1" href="{{ path('blog_tag',{'id':tag.id,'name':tag.name,'subdomain':post.userid.domain|default('mash')}) }}"><i class="fi-pricetag-multiple"></i> {{ tag.name }}</a>
+                      {% endfor %}
+                      <a class="margin-left-2" href="{{ path('blog_detail',{'id':post.id,'title':post.title,'subdomain':post.userid.domain|default('mash')}) }}" title="{{ post.title }}">查看详情</a>
                   </p>                 
                 </div>
-              </div>
-              <div class="grid-x shadow padding-1 margin-top-1">
-                  <div class="cell large-2">
-                    <p>
-                        <img src= "https://placeimg.com/150/150/people">
-                    </p>
-                  </div>
-                  <div class="cell large-10">
-                      <h4>Dreams feel real while we're in them.</h4>
-                      <p class="subheader">
-                          <a class="margin-right-1"><span><i class="fi-torso"> 作者</i>  </span></a>
-                          <a class="margin-right-1"><span><i class="fi-checkbox"> 分类</i> </span></a>
-                          <a class="margin-right-1"><span><i class="fi-calendar"> 2018-08-20</i></span></a>
-                          <a class="margin-right-1"><span><i class="fi-eye"> 6 阅读</i></span> </a>
-                          <a class="margin-right-1"><span><i class="fi-comments"> 6 评论</i></span></a>
-                      </p>
-                    <p>I'm going to improvise. Listen, there's something you should know about me... about inception. An idea is like a virus, resilient, highly contagious. The smallest seed of an idea can grow. It can grow to define or destroy you.</p>
-                    <p class="float-right">
-                        <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签</a>
-                        <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签2</a>
-                        <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签3</a>
-                        <a class="margin-left-2">查看详情</a>
-                    </p>                 
-                  </div>
-                </div>
-            <div class="grid-x shadow padding-1 margin-top-1">
-              <div class="cell large-2">
-                <p>
-                    <img src= "https://placeimg.com/150/150/people">
-                </p>
-              </div>
-              <div class="cell large-10">
-                  <h4>Dreams feel real while we're in them.</h4>
-                  <p class="subheader">
-                      <a class="margin-right-1"><span><i class="fi-torso"> 作者</i>  </span></a>
-                      <a class="margin-right-1"><span><i class="fi-checkbox"> 分类</i> </span></a>
-                      <a class="margin-right-1"><span><i class="fi-calendar"> 2018-08-20</i></span></a>
-                      <a class="margin-right-1"><span><i class="fi-eye"> 6 阅读</i></span> </a>
-                      <a class="margin-right-1"><span><i class="fi-comments"> 6 评论</i></span></a>
-                  </p>
-                <p>I'm going to improvise. Listen, there's something you should know about me... about inception. An idea is like a virus, resilient, highly contagious. The smallest seed of an idea can grow. It can grow to define or destroy you.</p>
-                <p class="float-right">
-                    <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签</a>
-                    <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签2</a>
-                    <a class="margin-right-1"><i class="fi-pricetag-multiple"></i> 标签3</a>
-                    <a class="margin-left-2">查看详情</a>
-                </p>                 
-              </div>
-            </div>
+              </div>            
+          {% endfor %}
           </div>
           <div class="cell margin-top-1">
             新闻动态
-            <div class="grid-x">
-                <div class="cell large-6 medium-6">
+            <div class="grid-x">    
+              {% for article in articles %}          
+                <div class="cell large-6 medium-6">                    
                     <div class="media-object">
                       <div class="media-object-section">
-                        <img class="thumbnail" src="https://placehold.it/100x100">
+                        {% if article.thumb %}
+                        <a title="{{ article.title }}" href="{{ path('article_detail',{'slug':article.title,'id':article.id}) }}"><img class="thumbnail" src="{{ article.thumb }}" width='100'></a>
+                        {% else %}
+                        <a title="{{ article.title }}" href="{{ path('article_detail',{'slug':article.title,'id':article.id}) }}"><img class="thumbnail" src="/public/images/100.png"></a>
+                        {% endif %}
                       </div>
                       <div class="media-object-section">
-                        <h5>Nunc Eu Ullamcorper Orci</h5>
-                        <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
+                        <h5><a title="{{ article.title }}" href="{{ path('article_detail',{'slug':article.title,'id':article.id}) }}">{{ article.title }}</a></h5>
+                        <p>{{ article.descript }}</p>
                       </div>
-                    </div>
-                    <div class="media-object">
-                        <div class="media-object-section">
-                          <img class="thumbnail" src="https://placehold.it/100x100">
-                        </div>
-                        <div class="media-object-section">
-                          <h5>Nunc Eu Ullamcorper Orci</h5>
-                          <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
-                        </div>
-                      </div>
-                      <div class="media-object">
-                          <div class="media-object-section">
-                            <img class="thumbnail" src="https://placehold.it/100x100">
-                          </div>
-                          <div class="media-object-section">
-                            <h5>Nunc Eu Ullamcorper Orci</h5>
-                            <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
-                          </div>
-                        </div>
-                </div>
-                <div class="cell large-6 medium-6">
-                    <div class="media-object">
-                      <div class="media-object-section">
-                        <img class="thumbnail" src="https://placehold.it/100x100">
-                      </div>
-                      <div class="media-object-section">
-                        <h5>Nunc Eu Ullamcorper Orci</h5>
-                        <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
-                      </div>
-                    </div>
-                    <div class="media-object">
-                        <div class="media-object-section">
-                          <img class="thumbnail" src="https://placehold.it/100x100">
-                        </div>
-                        <div class="media-object-section">
-                          <h5>Nunc Eu Ullamcorper Orci</h5>
-                          <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
-                        </div>
-                      </div>
-                      <div class="media-object">
-                          <div class="media-object-section">
-                            <img class="thumbnail" src="https://placehold.it/100x100">
-                          </div>
-                          <div class="media-object-section">
-                            <h5>Nunc Eu Ullamcorper Orci</h5>
-                            <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
-                          </div>
-                        </div>
-                </div> 
-                               
+                    </div>                   
+                  </div>
+                {% endfor %}                                
             </div>
           </div>
       {% endblock %}

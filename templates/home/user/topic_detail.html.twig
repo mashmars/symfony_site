@@ -1,0 +1,63 @@
+{% extends 'home/common_user.html.twig' %}
+{% block breadcrumb %}
+          <div class="grid-x">
+              <nav aria-label="You are here:" role="navigation">
+                  <ul class="breadcrumbs">
+                    <li><a href="#0">Home</a></li>
+                    <li><a href="#0">Features</a></li>                    
+                    <li>
+                      <span class="show-for-sr">Current: </span> Cloning
+                    </li>
+                  </ul>
+              </nav>  
+          </div>
+{% endblock %}
+          {% block right %}
+            <div class="cell large-8 medium-7 margin-top-2 padding-1 shadow">
+               <div class="grid-x">                    
+                    <div class="cell"><p class="lead text-center">{{ topic.title }}</p></div> 
+                    <div class="cell"><p class="text-center">{{ topic.content }}</p></div>                     
+                </div>
+                <p>评论</p>
+                <div class="grid-x">
+                  <div class="cell">
+                    {% for comment in pagination %}
+                      <div class="media-object">
+                          <div class="media-object-section">
+                            <img class="thumbnail" src="{{ comment.userid.headimg }}">
+                          </div>
+                          <div class="media-object-section">                            
+                            <p>{{ comment.content }}<button class="button tiny alert  margin-left-3 comment-delete" data-id="{{ comment.id }}">删除</button></p>
+                            
+                          </div>
+                      </div>
+                      {% endfor %}
+                  </div>
+
+                  {{ knp_pagination_render(pagination) }}
+                </div>
+
+            </div>
+          {% endblock %}
+          {% block script %}
+          {{ parent() }}
+          <script>
+            //删除
+            $('.comment-delete').click(function(){
+              $(this).prop('disabled',true);
+              var obj = $(this);
+              var id = $(this).attr('data-id');
+              $.post("{{ path('user_topic_comment_delete') }}",{id:id},function(data){
+                if(data.code == 0){
+                  layer.msg(data.msg,{time:2000,icon:1},function(){
+                    obj.parents('.media-object').remove();
+                  });
+                }else{
+                  obj.prop('disabled',false);
+                  layer.msg(data.msg,{time:2000,icon:5});
+                }
+              },'json')
+            })
+          </script>
+          {% endblock %}
+          

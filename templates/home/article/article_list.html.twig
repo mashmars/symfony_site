@@ -1,12 +1,13 @@
 {% extends 'home/common.html.twig' %}
-{% block breadcrumbs %}
+{% block title %}网站资讯{% endblock %}
+{% block breadcrumb %}
           <div class="grid-x">
               <nav aria-label="You are here:" role="navigation">
                   <ul class="breadcrumbs">
-                    <li><a href="#0">Home</a></li>
-                    <li><a href="#0">Features</a></li>                    
+                    <li><a href="{{ path('home') }}">首页</a></li>
+                    <li><a href="{{ path('article_index') }}">资讯列表</a></li>                    
                     <li>
-                      <span class="show-for-sr">Current: </span> Cloning
+                      <span class="show-for-sr">Current: </span>资讯列表
                     </li>
                   </ul>
               </nav>  
@@ -14,66 +15,41 @@
 {% endblock %}
 {% block main %}
           <div class="grid-x">            
-            <div class="cell large-4 medium-5 margin-top-3  padding-right-1">
-                <ul class="vertical menu accordion-menu" data-accordion-menu>
-                    <li>
+            <div class="cell large-3 medium-4 margin-top-3  padding-right-1">
+                <ul class="vertical menu accordion-menu shadow padding-top-1 padding-bottom-1 article_category" data-accordion-menu>
+                    {# <li>
                       <a href="#">分类一</a>
                       <ul class="menu vertical nested">
                         <li><a href="#">分类二</a></li>
                         <li><a href="#">分类三</a></li>
                       </ul>
-                    </li>
-                    <li><a href="#">分类四</a></li>
+                    </li> #}
+                    {% for category in article_category %}
+                    <li {% if category.id == app.request.get('id') %} class="active" {% endif %}><a href="{{ path('article_index',{'id':category.id}) }}">{{ category.name }}</a></li>
+                    {% endfor %}
                   </ul>   
             </div>
-            <div class="cell large-8 medium-7">                
+            <div class="cell large-9 medium-8">                
                 <div class="grid-x">
                   <div class="cell">
+                      {% for article in pagination %}
                       <div class="media-object">
                           <div class="media-object-section">
-                            <img class="thumbnail" src="https://placehold.it/100x100">
+                            {% if article.thumb %}
+                            <a href="{{ path('article_detail',{ 'slug':article.title,'id':article.id }) }}" target="_blank" title="{{ article.title }}"><img class="thumbnail" src="{{ article.thumb }}" width="108px"></a>
+                            {% else %}
+                            <a href="{{ path('article_detail',{ 'slug':article.title,'id':article.id }) }}" target="_blank" title="{{ article.title }}" ><img class="thumbnail" src="/public/images/100.png"></a>
+                            {% endif %}
                           </div>
                           <div class="media-object-section">                            
-                            <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
+                            <p><a href="{{ path('article_detail',{ 'slug':article.title,'id':article.id }) }}" target="_blank" title="{{ article.title }}">{{ article.title }}</a></p>
+                          <small>{{ article.descript }}</small>
                           </div>
                       </div>
-                      <div class="media-object">
-                          <div class="media-object-section">
-                            <img class="thumbnail" src="https://placehold.it/100x100">
-                          </div>
-                          <div class="media-object-section">                            
-                            <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
-                          </div>
-                      </div>
-                      <div class="media-object">
-                          <div class="media-object-section">
-                            <img class="thumbnail" src="https://placehold.it/100x100">
-                          </div>
-                          <div class="media-object-section">                            
-                            <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
-                          </div>
-                      </div>
-                      <div class="media-object">
-                          <div class="media-object-section">
-                            <img class="thumbnail" src="https://placehold.it/100x100">
-                          </div>
-                          <div class="media-object-section">                            
-                            <p>Quisque eget odio ac lectus vestibulum faucibus eget in metus. In pellentesque.</p>
-                          </div>
-                      </div>
+                     {% endfor %}
                   </div>
                 </div>
-                <ul class="pagination" role="navigation" aria-label="Pagination">
-                    <li class="disabled">Previous <span class="show-for-sr">page</span></li>
-                    <li class="current"><span class="show-for-sr">You're on page</span> 1</li>
-                    <li><a href="#0" aria-label="Page 2">2</a></li>
-                    <li><a href="#0" aria-label="Page 3">3</a></li>
-                    <li><a href="#0" aria-label="Page 4">4</a></li>
-                    <li class="ellipsis" aria-hidden="true"></li>
-                    <li><a href="#0" aria-label="Page 12">12</a></li>
-                    <li><a href="#0" aria-label="Page 13">13</a></li>
-                    <li><a href="#0" aria-label="Next page">Next <span class="show-for-sr">page</span></a></li>
-                  </ul>
+                {{ knp_pagination_render(pagination) }}
             </div>
           </div>   
  {% endblock %}

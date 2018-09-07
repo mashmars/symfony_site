@@ -18,31 +18,22 @@
 <div class="top-bar">
   <div class="top-bar-left">
     <ul class="menu">
-      <li class="menu-text">站点名称</li>
+      <li class="menu-text">我的站点</li>
     </ul>
   </div>
   <div class="top-bar-right">
     <ul class="dropdown menu" data-dropdown-menu>
       <li class="is-action"><a href="/">首页</a></li>
       <li>
-        <a href="#">专辑</a>
-        <ul class="menu vertical">
-          <li><a>专辑一</a></li>
-          <li><a>专辑二</a></li>
-        </ul>
+        <a href="{{ path('album_index') }}">图集专辑</a>       
       </li>
       <li>
-        <a href="#">话题</a>
-        <ul class="menu vertical">
-          <li><a>话题一</a></li>
-          <li><a>话题二</a></li>
-        </ul>
-      </li>
+        <a href="{{ path('topic_index') }}">话题讨论</a>        
       <li>
           <a href="{{ path('article_index') }}">网站指引</a>
           <ul class="menu vertical">
           {% for category in article_category %}
-            <li><a>{{ category.name }}</a></li>
+            <li><a href="{{ path('article_index',{'id':category.id}) }}">{{ category.name }}</a></li>
             {% endfor %}
           </ul> 
         </li>
@@ -93,7 +84,7 @@
               <div class="card-profile-stats-intro-content">
                 <h3>
                 {% if app.user.domain != app.session.get('subdomain') %}
-                {{ app.user.username }} <a class="button alert small margin-left-3" title="返回我的博客" href="{{ path('blog_index',{'subdomain':app.user.domain }) }}">返回我的博客</a>
+                {{ app.user.username }} <a class="button alert small margin-left-3" title="返回我的博客" href="{{ path('blog_index',{'subdomain':app.user.domain|default('mash') }) }}">返回我的博客</a>
                 {% else %}
                 {{ app.user.username }}
                 {% endif %}
@@ -106,17 +97,14 @@
 
             <div class="card-profile-stats-container">
               <div class="card-profile-stats-statistic">
-                <span class="stat">25</span>
+                <span class="stat">{{ app.user.getCountPost() }}</span>
                 <p>posts</p>
               </div> <!-- /.card-profile-stats-statistic -->
               <div class="card-profile-stats-statistic">
-                <span class="stat">125</span>
+                <span class="stat">{{ app.user.getCountFollower() }}</span>
                 <p>followers</p>
               </div> <!-- /.card-profile-stats-statistic -->
-              <div class="card-profile-stats-statistic">
-                <span class="stat">88</span>
-                <p>likes</p>
-              </div> <!-- /.card-profile-stats-statistic -->
+              
             </div> <!-- /.card-profile-stats-container -->
 
             <div class="card-profile-stats-more">
@@ -150,30 +138,12 @@
           {% endif %}
         </div>
          {% block right %}
-        <div class="callout shadow">
-          <h6 >最新动态</h6>
-          <ul class="list-circle">
-            <li><a>这是标题</a></li>
-            <li><a>这是标题</a></li>
-            <li><a>这是标题</a></li>
-          </ul>
-        </div>
-
-        <div class="callout shadow">
-          <h6>热门信息</h6>
-          <ul class="list-circle">
-              <li><a>这是标题</a></li>
-              <li><a>这是标题</a></li>
-              <li><a>这是标题</a></li>
-            </ul>
-        </div>
+        
         <div class="callout shadow">
             <h6>友情链接</h6>
             <ul class="list-circle">
-                <li><a>这是标题</a></li>
-                <li><a>这是标题</a></li>
-                <li><a>这是标题</a></li>
-              </ul>
+                <li><a href="http://mashuai.imkxa.com" target="_blank ">我的博客</a></li>               
+            </ul>
         </div>
         {% endblock %}
       </div>
